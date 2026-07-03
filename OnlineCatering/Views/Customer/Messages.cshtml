@@ -1,0 +1,36 @@
+@model IEnumerable<Message>
+@{ ViewData["Title"] = "Messages"; ViewData["Subtitle"] = "View, reply and manage your messages"; }
+
+@if (!Model.Any())
+{
+    <div class="panel-card"><div class="panel-empty"><i class="bi bi-chat"></i><p>No messages yet.</p></div></div>
+}
+else
+{
+    <div class="panel-card panel-card-padded">
+        @foreach (var msg in Model)
+        {
+            var isUnread = !msg.IsRead && msg.ReceiverType == "Customer" && msg.ReceiverId == Context.Session.GetInt32("ReferenceId");
+            <div class="panel-message-item @(isUnread ? "unread" : "")">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-bold">
+                            @msg.Subject
+                            @if (isUnread) { <span class="panel-badge panel-badge-accent">New</span> }
+                        </h6>
+                        <small class="text-muted">@msg.SentDate.ToString("dd MMM yyyy HH:mm")</small>
+                        <p class="mb-0 mt-2 small text-muted">@(msg.Body.Length > 120 ? msg.Body[..120] + "..." : msg.Body)</p>
+                    </div>
+                    <div class="panel-actions">
+                        <a asp-action="MessageDetails" asp-route-id="@msg.MessageId" class="panel-btn panel-btn-view">Read</a>
+                        <a asp-action="ReplyMessage" asp-route-id="@msg.MessageId" class="panel-btn panel-btn-accent">Reply</a>
+                        <form asp-action="DeleteMessage" method="post" class="d-inline" onsubmit="return confirm('Delete message?');">
+                            <input type="hidden" name="id" value="@msg.MessageId" />
+                            <button type="submit" class="panel-btn panel-btn-delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

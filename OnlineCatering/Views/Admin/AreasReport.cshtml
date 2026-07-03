@@ -1,0 +1,35 @@
+@model IEnumerable<OnlineCatering.Controllers.AreaReportItem>
+@{ ViewData["Title"] = "Area Report"; ViewData["Subtitle"] = $"Caterer distribution across {Model.Select(m => m.City).Distinct().Count()} cities"; }
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6><i class="bi bi-geo-alt-fill"></i> City & Area Breakdown</h6>
+        <span class="admin-badge admin-badge-info">@Model.Sum(m => m.CatererCount) Caterers</span>
+    </div>
+    <div class="admin-card-body">
+        <div class="admin-table-wrap">
+            <table class="table admin-table mb-0">
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Area</th>
+                        <th>Total</th>
+                        <th>Active</th>
+                        <th class="text-end">Avg Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model)
+                    {
+                        <tr>
+                            <td><strong>@row.City</strong></td>
+                            <td><span class="area-badge">@row.Area</span></td>
+                            <td>@row.CatererCount</td>
+                            <td><span class="admin-badge admin-badge-success">@row.ActiveCount</span></td>
+                            <td class="text-end"><i class="bi bi-star-fill text-warning"></i> @row.AvgRating.ToString("0.0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

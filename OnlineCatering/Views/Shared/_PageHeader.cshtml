@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = ViewData["Title"] ?? "Page";
+    var breadcrumbs = ViewData["Breadcrumbs"] as string;
+}
+
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                @if (!string.IsNullOrEmpty(breadcrumbs))
+                {
+                    <li class="breadcrumb-item active">@breadcrumbs</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                }
+            </ol>
+        </nav>
+        <h1>@ViewData["Title"]</h1>
+        @if (ViewData["Subtitle"] != null)
+        {
+            <p class="mb-0 opacity-75">@ViewData["Subtitle"]</p>
+        }
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@model IEnumerable<CustOrder>
+@{ ViewData["Title"] = "My Bookings"; ViewData["Subtitle"] = $"{Model.Count()} booking(s)"; }
+
+<div class="panel-card">
+    <div class="panel-card-header">
+        <h6><i class="bi bi-calendar-check-fill"></i> All Bookings</h6>
+        <a asp-action="Restaurants" class="panel-btn panel-btn-accent"><i class="bi bi-plus"></i> New Booking</a>
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="panel-empty">
+            <i class="bi bi-calendar"></i>
+            <p>No bookings found.</p>
+            <a asp-action="Restaurants" class="panel-btn panel-btn-accent">Browse Caterers</a>
+        </div>
+    }
+    else
+    {
+        <div class="panel-table-wrap">
+            <table class="table panel-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Caterer</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Guests</th>
+                        <th>Amount</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td><code>@order.BookingId</code></td>
+                            <td><strong>@order.Caterer?.BusinessName</strong></td>
+                            <td>@order.EventType</td>
+                            <td>@order.EventDate.ToString("dd MMM yyyy")</td>
+                            <td>@order.GuestCount</td>
+                            <td>Rs. @order.TotalAmount.ToString("N0")</td>
+                            <td><span class="panel-badge @(order.PaymentStatus == "Paid" ? "panel-badge-success" : "panel-badge-warning")">@order.PaymentStatus</span></td>
+                            <td><span class="panel-badge panel-badge-info">@order.OrderStatus</span></td>
+                            <td>
+                                <div class="panel-actions justify-content-end">
+                                    <a asp-action="BookingDetails" asp-route-id="@order.OrderId" class="panel-btn panel-btn-view">Details</a>
+                                    @if (order.PaymentStatus == "Pending")
+                                    {
+                                        <a asp-action="Payment" asp-route-orderId="@order.OrderId" class="panel-btn panel-btn-pay">Pay</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

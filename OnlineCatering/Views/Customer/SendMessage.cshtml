@@ -1,0 +1,26 @@
+@model MessageViewModel
+@{ ViewData["Title"] = "Send Message"; }
+
+<div class="page-header">
+    <div class="container"><h1>Message to @Model.ReceiverName</h1></div>
+</div>
+
+<div class="container pb-5">
+    <div class="card form-card p-4">
+        <form asp-action="SendMessage" method="post">
+            <input type="hidden" asp-for="ReceiverId" />
+            <input type="hidden" asp-for="ReceiverType" />
+            <input type="hidden" asp-for="ReceiverName" />
+            <div class="mb-3">
+                <label asp-for="Subject" class="form-label"></label>
+                <input asp-for="Subject" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Body" class="form-label"></label>
+                <textarea asp-for="Body" class="form-control" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary-custom">Send</button>
+            <a asp-action="Messages" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

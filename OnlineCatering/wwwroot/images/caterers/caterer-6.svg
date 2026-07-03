@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Saffron Delights">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1020"/>
+      <stop offset="100%" stop-color="#2d1a3d"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9b59b6"/>
+      <stop offset="100%" stop-color="#f39c12"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <rect x="200" y="200" width="200" height="80" rx="12" fill="url(#g)" opacity="0.85"/>
+  <rect x="215" y="215" width="170" height="50" rx="8" fill="#fff" opacity="0.15"/>
+  <circle cx="250" cy="240" r="15" fill="#f39c12" opacity="0.8"/>
+  <circle cx="300" cy="240" r="15" fill="#e74c3c" opacity="0.7"/>
+  <circle cx="350" cy="240" r="15" fill="#f1c40f" opacity="0.8"/>
+  <text x="300" y="355" text-anchor="middle" fill="#d4a5ff" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Saffron Delights</text>
+</svg>

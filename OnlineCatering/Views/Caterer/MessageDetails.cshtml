@@ -1,0 +1,15 @@
+@model Message
+@{ ViewData["Title"] = "Message Details"; }
+<partial name="_PageHeader" />
+<div class="container pb-5">
+    <div class="col-lg-8 mx-auto card p-4">
+        <h5>@Model.Subject</h5>
+        <small class="text-muted">@Model.SentDate.ToString("dd MMM yyyy HH:mm")</small>
+        <hr /><p>@Model.Body</p>
+        <div class="d-flex gap-2 mt-3">
+            <a asp-action="ReplyMessage" asp-route-id="@Model.MessageId" class="btn btn-accent btn-sm">Reply</a>
+            <form asp-action="DeleteMessage" method="post" class="d-inline"><input type="hidden" name="id" value="@Model.MessageId" /><button class="btn btn-outline-danger btn-sm">Delete</button></form>
+            <a asp-action="Messages" class="btn btn-secondary btn-sm">Back</a>
+        </div>
+    </div>
+</div>

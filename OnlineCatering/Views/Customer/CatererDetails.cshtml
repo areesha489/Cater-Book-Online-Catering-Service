@@ -1,0 +1,104 @@
+@model Caterer
+@using OnlineCatering.Services
+@{ ViewData["Title"] = Model.BusinessName; var heroImg = CatererImageHelper.GetImageUrl(Model, Model.CatererId); }
+
+<div class="caterer-detail-hero mb-4">
+    @{ ViewData["CatererImageAlt"] = Model.BusinessName; ViewData["CatererImageClass"] = "caterer-detail-hero-img"; }
+    <partial name="_CatererImage" model="@heroImg" />
+    <div class="caterer-detail-hero-overlay"></div>
+</div>
+
+<div class="page-header pt-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h1>@Model.BusinessName</h1>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-geo-alt"></i> @Model.City
+                    @if (!string.IsNullOrEmpty(Model.Area))
+                    {
+                        <span class="area-badge">@Model.Area</span>
+                    }
+                    &nbsp;
+                    <i class="bi bi-star-fill text-warning"></i> @Model.Rating &nbsp;
+                    <span class="badge bg-secondary">@Model.FoodType</span>
+                </p>
+            </div>
+            <div>
+                @if (Context.Session.GetString("UserType") == "Customer")
+                {
+                    <form asp-action="ToggleFavorite" method="post" class="d-inline">
+                        <input type="hidden" name="catererId" value="@Model.CatererId" />
+                        <button type="submit" class="btn @(ViewBag.IsFavorite == true ? "btn-warning" : "btn-outline-warning")">
+                            <i class="bi bi-heart@(ViewBag.IsFavorite == true ? "-fill" : "")"></i>
+                            @(ViewBag.IsFavorite == true ? "Favorited" : "Add to Favorites")
+                        </button>
+                    </form>
+                    <a asp-action="Book" asp-route-catererId="@Model.CatererId" class="btn btn-primary-custom ms-2">Book Now</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary-custom">Login to Book</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card p-4 mb-4">
+                <h4>About</h4>
+                <p>@Model.Description</p>
+                <p><strong>Owner:</strong> @Model.OwnerName</p>
+                <p><strong>Contact:</strong> @Model.Phone | @Model.Email</p>
+                <p><strong>Cancellation Charge:</strong> @Model.CancellationChargePercent% of total amount</p>
+            </div>
+
+            <h4 class="mb-3">Menu</h4>
+            @foreach (var category in Model.MenuCategories)
+            {
+                <div class="card mb-3">
+                    <div class="card-header bg-white fw-bold">@category.CategoryName</div>
+                    <div class="card-body">
+                        @foreach (var item in category.MenuItems)
+                        {
+                            var dishImg = !string.IsNullOrWhiteSpace(item.ImageUrl)
+                                ? item.ImageUrl
+                                : DishImageHelper.GetImageUrl(item.ItemName);
+                            <div class="menu-item-row d-flex justify-content-between align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-3 flex-grow-1">
+                                    <img src="@dishImg" alt="@item.ItemName" class="menu-item-thumb" loading="lazy" onerror="this.onerror=null;this.src='@DishImageHelper.DefaultUrl';" />
+                                    <div>
+                                        <strong>@item.ItemName</strong>
+                                        @if (item.IsVeg) { <span class="badge bg-success ms-1">Veg</span> }
+                                        else { <span class="badge bg-danger ms-1">Non-Veg</span> }
+                                        <br /><small class="text-muted">@item.Description</small>
+                                    </div>
+                                </div>
+                                <div class="text-end flex-shrink-0">
+                                    <strong>Rs. @item.PricePerPlate</strong><br />
+                                    <small class="text-muted">per plate</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-lg-4">
+            <div class="card p-4">
+                <h5>Quick Info</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-people me-2"></i>Min guests: @Model.MinGuests</li>
+                    <li class="mb-2"><i class="bi bi-people-fill me-2"></i>Max guests: @Model.MaxGuests</li>
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>@Model.Address</li>
+                </ul>
+                <a asp-action="SendMessage" asp-route-receiverId="@Model.CatererId" asp-route-receiverType="Caterer" asp-route-receiverName="@Model.BusinessName" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-chat-dots me-1"></i>Message Caterer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

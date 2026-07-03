@@ -1,0 +1,9 @@
+@model IEnumerable<SuppInvoice>
+@{ ViewData["Title"] = "Supplier Invoices"; }
+<partial name="_PageHeader" />
+<div class="container pb-5">
+    <div class="card border-0"><table class="table mb-0">
+        <thead><tr><th>Invoice No</th><th>Supplier</th><th>Order</th><th>Date</th><th>Amount</th></tr></thead>
+        <tbody>@foreach(var i in Model){<tr><td>@i.InvoiceNo</td><td>@i.Supplier?.SupplierName</td><td>@i.Order?.SuppOrderNo</td><td>@i.InvoiceDate.ToString("dd MMM yyyy")</td><td>Rs. @i.EstimatedAmount.ToString("N0")</td></tr>}</tbody>
+    </table></div>
+</div>

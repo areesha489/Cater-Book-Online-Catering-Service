@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Desi Feast">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1408"/>
+      <stop offset="100%" stop-color="#332510"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e67e22"/>
+      <stop offset="100%" stop-color="#d35400"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <ellipse cx="300" cy="250" rx="140" ry="40" fill="url(#g)"/>
+  <ellipse cx="300" cy="242" rx="125" ry="32" fill="#f5cba7" opacity="0.6"/>
+  <path d="M240 200 L300 160 L360 200" stroke="#f39c12" stroke-width="4" fill="none"/>
+  <circle cx="300" cy="230" r="20" fill="#c0392b" opacity="0.7"/>
+  <text x="300" y="355" text-anchor="middle" fill="#e67e22" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Desi Feast</text>
+</svg>

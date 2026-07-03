@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Catering">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0d12"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f39c12"/>
+      <stop offset="100%" stop-color="#e67e22"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <path d="M200 250h200l-20 55H220z" fill="url(#g)"/>
+  <path d="M185 250h230v12H185z" fill="#fff" opacity="0.9"/>
+  <path d="M300 115c-45 0-68 32-68 58v42h136v-42c0-26-23-58-68-58z" fill="url(#g)"/>
+  <ellipse cx="300" cy="115" rx="55" ry="14" fill="#ffd89b"/>
+  <text x="300" y="355" text-anchor="middle" fill="#f39c12" font-family="Arial,sans-serif" font-size="24" font-weight="bold">CaterBook</text>
+</svg>

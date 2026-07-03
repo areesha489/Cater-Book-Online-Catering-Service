@@ -1,0 +1,50 @@
+@model IEnumerable<Worker>
+@{
+    ViewData["Title"] = "Staff";
+    ViewData["Subtitle"] = $"{Model.Count()} worker(s) registered";
+    var types = ViewBag.WorkerTypes as IEnumerable<WorkerType> ?? Enumerable.Empty<WorkerType>();
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel-card">
+            <div class="panel-card-header"><h6><i class="bi bi-people-fill"></i> Staff List</h6></div>
+            <div class="panel-table-wrap">
+                <table class="table panel-table mb-0">
+                    <thead><tr><th>Name</th><th>Type</th><th>Phone</th><th>Join Date</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @foreach (var w in Model)
+                        {
+                            <tr>
+                                <td><strong>@w.FullName</strong></td>
+                                <td>@w.WorkerType?.TypeName</td>
+                                <td>@w.Phone</td>
+                                <td>@w.JoinDate.ToString("dd MMM yyyy")</td>
+                                <td><span class="panel-badge @(w.IsActive ? "panel-badge-success" : "panel-badge-secondary")">@(w.IsActive ? "Active" : "Inactive")</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header"><h6><i class="bi bi-person-plus"></i> Add Worker</h6></div>
+            <div class="panel-card-body-padded">
+                <form asp-action="AddWorker" method="post">
+                    <div class="mb-3"><label class="form-label">Full Name</label><input name="FullName" class="form-control" required /></div>
+                    <div class="mb-3">
+                        <label class="form-label">Worker Type</label>
+                        <select name="WorkerTypeId" class="form-select" required>
+                            @foreach (var t in types) { <option value="@t.WorkerTypeId">@t.TypeName</option> }
+                        </select>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Phone</label><input name="Phone" class="form-control" /></div>
+                    <div class="mb-3"><label class="form-label">Address</label><input name="Address" class="form-control" /></div>
+                    <button type="submit" class="panel-btn panel-btn-accent w-100 justify-content-center py-2">Add Worker</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

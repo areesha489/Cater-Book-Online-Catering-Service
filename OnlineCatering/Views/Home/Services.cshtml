@@ -1,0 +1,142 @@
+@{ ViewData["Title"] = "Our Services"; ViewData["Subtitle"] = "Everything CaterBook offers — for customers & caterers"; }
+
+<partial name="_PageHeader" />
+
+<section class="section-dark pt-0">
+    <div class="container pb-5">
+        <div class="text-center mb-5 reveal-up">
+            <span class="script-tag d-inline">CaterBook Platform</span>
+            <h2 class="section-title">Complete Catering Solution</h2>
+            <p class="text-muted mx-auto services-intro">One platform to discover caterers, book events, pay online, manage menus, staff & invoices — everything in one place.</p>
+        </div>
+
+        <div class="row g-4 mb-5 justify-content-center reveal-up">
+            @foreach (var (icon, title, desc, color) in new[] {
+                ("bi-person-heart", "For Customers", "Search, compare, book & pay for catering online.", "orange"),
+                ("bi-shop", "For Caterers", "Manage business, menu, bookings, staff & suppliers.", "green")
+            })
+            {
+                <div class="col-sm-6 col-lg-5">
+                    <div class="service-role-card service-role-@color">
+                        <div class="service-role-icon"><i class="bi @icon"></i></div>
+                        <h4>@title</h4>
+                        <p>@desc</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="service-section reveal-up mb-5">
+            <div class="service-section-head text-center">
+                <span class="section-tag">Customer Panel</span>
+                <h3 class="section-title">Customer Features</h3>
+                <p class="text-muted services-section-desc">Book your next event in minutes</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                @{ var ci = 1; }
+                @foreach (var (icon, title, desc, link, ctrl, act) in new[] {
+                    ("bi-shop-window", "Browse All Restaurants", "See every caterer without knowing names — filter by city & area.", "Explore", "Customer", "Restaurants"),
+                    ("bi-search", "Search by Area", "Find caterers by city, locality, food type & guest count.", "Search", "Customer", "Search"),
+                    ("bi-calendar-check", "Online Booking", "Select menu, event date, venue & guest count — book in minutes.", "Book", "Customer", "Restaurants"),
+                    ("bi-wallet2", "Online Payment", "Pay via Easypaisa, JazzCash or Bank Account.", "Pay", "Customer", "MyBookings"),
+                    ("bi-receipt", "Auto Invoice", "Invoice generated automatically after payment.", "View", "Customer", "MyBookings"),
+                    ("bi-heart-fill", "Favorite Caterers", "Save preferred caterers for quick re-booking.", "Favorites", "Customer", "Favorites"),
+                    ("bi-chat-dots", "Messaging", "Chat directly with caterers about your event.", "Messages", "Customer", "Messages"),
+                    ("bi-speedometer2", "Customer Dashboard", "Track bookings, payments & profile in one panel.", "Dashboard", "Customer", "Dashboard")
+                })
+                {
+                    <div class="col-sm-6 col-lg-3 d-flex">
+                        <div class="service-feature-card service-feature-customer w-100">
+                            <span class="service-feature-num">@ci.ToString("00")</span>
+                            <div class="service-feature-top">
+                                <div class="service-feature-icon"><i class="bi @icon"></i></div>
+                                <h6>@title</h6>
+                            </div>
+                            <p>@desc</p>
+                            <a asp-controller="@ctrl" asp-action="@act" class="service-feature-link">@link <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    ci++;
+                }
+            </div>
+        </div>
+
+        <div class="service-section reveal-up mb-5">
+            <div class="service-section-head text-center">
+                <span class="section-tag">Caterer Panel</span>
+                <h3 class="section-title">Caterer Features</h3>
+                <p class="text-muted services-section-desc">Grow your catering business online</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                @{ var ki = 1; }
+                @foreach (var (icon, title, desc) in new[] {
+                    ("bi-building-gear", "Business Profile", "Update restaurant details, area, food type & upload restaurant photo."),
+                    ("bi-journal-text", "Menu Management", "Create categories, add dishes with prices per plate."),
+                    ("bi-calendar-event", "Booking Management", "View, confirm, cancel & manage all customer orders."),
+                    ("bi-receipt-cutoff", "Invoice Generation", "Auto invoices for every completed booking."),
+                    ("bi-people", "Worker Management", "Add staff, assign roles & track worker types."),
+                    ("bi-cash-coin", "Salary Management", "Record & manage worker salaries."),
+                    ("bi-truck", "Supplier Management", "Manage suppliers, raw materials & purchase orders."),
+                    ("bi-chat-left-text", "Customer Messaging", "Reply to customer queries from your panel."),
+                    ("bi-speedometer2", "Caterer Dashboard", "Revenue, pending & confirmed bookings at a glance.")
+                })
+                {
+                    <div class="col-sm-6 col-lg-4 d-flex">
+                        <div class="service-feature-card service-feature-caterer w-100">
+                            <span class="service-feature-num">@ki.ToString("00")</span>
+                            <div class="service-feature-top">
+                                <div class="service-feature-icon caterer"><i class="bi @icon"></i></div>
+                                <h6>@title</h6>
+                            </div>
+                            <p>@desc</p>
+                        </div>
+                    </div>
+                    ki++;
+                }
+            </div>
+            <div class="text-center mt-4">
+                <a asp-controller="Account" asp-action="RegisterCaterer" class="btn-glow"><i class="bi bi-shop"></i> Register as Caterer</a>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5 reveal-up justify-content-center">
+            <div class="col-lg-5 d-flex">
+                <div class="service-info-card w-100">
+                    <div class="service-info-head">
+                        <div class="service-info-icon pay"><i class="bi bi-wallet2"></i></div>
+                        <h4>Payment Methods</h4>
+                    </div>
+                    <ul class="service-info-list">
+                        <li><i class="bi bi-phone-fill text-success"></i> <strong>Easypaisa</strong> — Mobile wallet payment</li>
+                        <li><i class="bi bi-phone-vibrate text-danger"></i> <strong>JazzCash</strong> — Mobile wallet payment</li>
+                        <li><i class="bi bi-bank text-primary"></i> <strong>Bank Account</strong> — Direct bank transfer</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-5 d-flex">
+                <div class="service-info-card w-100">
+                    <div class="service-info-head">
+                        <div class="service-info-icon rules"><i class="bi bi-info-circle"></i></div>
+                        <h4>Booking Rules</h4>
+                    </div>
+                    <ul class="service-info-list">
+                        <li><i class="bi bi-calendar-minus"></i> Minimum <strong>7 days</strong> advance booking required</li>
+                        <li><i class="bi bi-people"></i> Minimum <strong>50 guests</strong> per booking</li>
+                        <li><i class="bi bi-x-circle"></i> Cancellation charges apply as per caterer policy</li>
+                        <li><i class="bi bi-receipt"></i> Invoice auto-generated after successful payment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-cta reveal-up text-center">
+            <h3 class="text-white fw-bold mb-3">Ready to get started?</h3>
+            <p class="text-muted mb-4 mx-auto services-cta-text">Join thousands using CaterBook for hassle-free catering bookings across Pakistan.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a asp-controller="Account" asp-action="RegisterCustomer" class="btn-glow"><i class="bi bi-person-plus"></i> Register as Customer</a>
+                <a asp-controller="Account" asp-action="RegisterCaterer" class="btn-glass"><i class="bi bi-shop"></i> Register as Caterer</a>
+                <a asp-controller="Customer" asp-action="Restaurants" class="btn-glass"><i class="bi bi-shop-window"></i> Browse Restaurants</a>
+            </div>
+        </div>
+    </div>
+</section>

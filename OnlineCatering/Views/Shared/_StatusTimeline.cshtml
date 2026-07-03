@@ -1,0 +1,30 @@
+@model CustOrder
+@{
+    var steps = new[] { "Pending", "Confirmed", "In Progress", "Completed" };
+    var currentIdx = Model.OrderStatus == "Cancelled" ? -1 : Array.IndexOf(steps, Model.OrderStatus);
+    if (Model.OrderStatus == "Cancelled") currentIdx = -1;
+}
+<div class="status-timeline mb-4">
+    @if (Model.OrderStatus == "Cancelled")
+    {
+        <div class="alert alert-danger py-2 mb-0"><i class="bi bi-x-circle me-1"></i>Booking Cancelled</div>
+    }
+    else
+    {
+        <div class="timeline-steps">
+            @for (var i = 0; i < steps.Length; i++)
+            {
+                var done = i <= currentIdx;
+                var active = i == currentIdx;
+                <div class="timeline-step @(done ? "done" : "") @(active ? "active" : "")">
+                    <div class="timeline-dot"><i class="bi @(done ? "bi-check-lg" : "bi-circle")"></i></div>
+                    <span>@steps[i]</span>
+                </div>
+                @if (i < steps.Length - 1)
+                {
+                    <div class="timeline-line @(i < currentIdx ? "done" : "")"></div>
+                }
+            }
+        </div>
+    }
+</div>

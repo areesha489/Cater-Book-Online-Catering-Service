@@ -1,0 +1,47 @@
+@model CustomerInvoice
+@{ ViewData["Title"] = "Invoice " + Model.InvoiceNumber; }
+
+<div class="container py-5">
+    <div class="invoice-box">
+        <div class="text-center mb-4">
+            <h2>INVOICE</h2>
+            <p class="mb-0">@Model.InvoiceNumber</p>
+            <p class="text-muted">@Model.InvoiceDate.ToString("dd MMMM yyyy")</p>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <strong>Bill To:</strong><br />
+                @Model.Order?.Customer?.FullName<br />
+                @Model.Order?.Customer?.Phone
+            </div>
+            <div class="col-6 text-end">
+                <strong>Booking ID:</strong> @Model.Order?.BookingId<br />
+                <strong>Event:</strong> @Model.Order?.EventType<br />
+                <strong>Date:</strong> @Model.Order?.EventDate.ToString("dd MMM yyyy")
+            </div>
+        </div>
+        <table class="table">
+            <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+            <tbody>
+                @foreach (var item in Model.InvoiceItems)
+                {
+                    <tr>
+                        <td>@item.ItemName</td>
+                        <td>@item.Quantity</td>
+                        <td>Rs. @item.UnitPrice</td>
+                        <td>Rs. @item.LineTotal.ToString("N0")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="3" class="text-end">Subtotal</td><td>Rs. @Model.SubTotal.ToString("N0")</td></tr>
+                <tr><td colspan="3" class="text-end">Tax (5%)</td><td>Rs. @Model.TaxAmount.ToString("N0")</td></tr>
+                <tr><th colspan="3" class="text-end">Grand Total</th><th>Rs. @Model.GrandTotal.ToString("N0")</th></tr>
+            </tfoot>
+        </table>
+        <div class="mt-3">
+            <a asp-action="Invoices" class="btn btn-secondary">Back</a>
+            <button onclick="window.print()" class="btn btn-accent">Print</button>
+        </div>
+    </div>
+</div>

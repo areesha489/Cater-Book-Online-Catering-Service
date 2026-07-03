@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Green Leaf">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1a0f"/>
+      <stop offset="100%" stop-color="#143d24"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b6b4a"/>
+      <stop offset="100%" stop-color="#58d68d"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <path d="M300 120 C340 160 360 200 300 280 C240 200 260 160 300 120Z" fill="url(#g)"/>
+  <path d="M300 145 C320 175 330 210 300 255 C270 210 280 175 300 145Z" fill="#a9dfbf" opacity="0.5"/>
+  <ellipse cx="300" cy="290" rx="120" ry="22" fill="#000" opacity="0.25"/>
+  <text x="300" y="355" text-anchor="middle" fill="#58d68d" font-family="Arial,sans-serif" font-size="20" font-weight="bold">Green Leaf Veg</text>
+</svg>

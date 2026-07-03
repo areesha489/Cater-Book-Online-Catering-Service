@@ -1,0 +1,225 @@
+/* ══════════════════════════════════════════
+   CaterBook — One-Line Brand Logo
+   ══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&display=swap');
+
+.caterbook-logo {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.55rem;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+    transition: transform 0.28s ease, filter 0.28s ease;
+}
+
+a.caterbook-logo:hover,
+a:hover .caterbook-logo,
+.navbar-brand:hover .caterbook-logo {
+    transform: translateY(-1px);
+}
+
+.caterbook-mark {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.caterbook-mark::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 18px;
+    background: radial-gradient(circle, rgba(243,156,18,0.35) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.caterbook-logo:hover .caterbook-mark::after {
+    opacity: 1;
+}
+
+.caterbook-mark-svg {
+    display: block;
+    filter: drop-shadow(0 4px 14px rgba(243,156,18,0.4));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.caterbook-logo:hover .caterbook-mark-svg {
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 6px 20px rgba(243,156,18,0.55));
+}
+
+/* Sizes */
+.caterbook-logo--sm .caterbook-mark-svg { width: 30px; height: 30px; }
+.caterbook-logo--sm .caterbook-wordmark { font-size: 1.1rem; }
+.caterbook-logo--sm .caterbook-tagline-inline { font-size: 0.62rem; }
+
+.caterbook-logo--md .caterbook-mark-svg { width: 38px; height: 38px; }
+.caterbook-logo--md .caterbook-wordmark { font-size: 1.45rem; }
+.caterbook-logo--md .caterbook-tagline-inline { font-size: 0.65rem; }
+
+.caterbook-logo--lg .caterbook-mark-svg { width: 48px; height: 48px; }
+.caterbook-logo--lg .caterbook-wordmark { font-size: 1.85rem; }
+.caterbook-logo--lg .caterbook-tagline-inline { font-size: 0.72rem; }
+
+.caterbook-logo--sidebar .caterbook-mark-svg { width: 36px; height: 36px; }
+.caterbook-logo--sidebar .caterbook-wordmark { font-size: 1.15rem; }
+
+.caterbook-logo--footer .caterbook-mark-svg { width: 36px; height: 36px; }
+.caterbook-logo--footer .caterbook-wordmark { font-size: 1.3rem; }
+.caterbook-logo--footer .caterbook-tagline-inline { font-size: 0.62rem; }
+
+.caterbook-logo--hero .caterbook-mark-svg { width: 56px; height: 56px; }
+.caterbook-logo--hero .caterbook-wordmark { font-size: 2.2rem; }
+
+/* Wordmark — always one line */
+.caterbook-wordmark {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.caterbook-cater,
+.caterbook-book {
+    display: inline;
+}
+
+/* Tagline inline (optional, same row) */
+.caterbook-tagline-sep {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(243,156,18,0.5);
+    flex-shrink: 0;
+    margin: 0 0.15rem;
+}
+
+.caterbook-tagline-inline {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+/* ── Color variants ── */
+.caterbook-logo--light .caterbook-cater {
+    color: #fff;
+    text-shadow: 0 0 24px rgba(255,255,255,0.15);
+}
+
+.caterbook-logo--light .caterbook-book {
+    background: linear-gradient(135deg, #ffd89b 0%, #f39c12 45%, #f4a261 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(243,156,18,0.35));
+}
+
+.caterbook-logo--light .caterbook-tagline-inline {
+    color: rgba(255,255,255,0.45);
+}
+
+.caterbook-logo--dark .caterbook-cater {
+    color: #1a1f2e;
+}
+
+.caterbook-logo--dark .caterbook-book {
+    background: linear-gradient(135deg, #d4622a 0%, #f39c12 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.caterbook-logo--dark .caterbook-tagline-inline {
+    color: #8892a4;
+}
+
+.caterbook-logo--sidebar-v .caterbook-cater {
+    color: #fff;
+}
+
+.caterbook-logo--sidebar-v .caterbook-book {
+    background: linear-gradient(135deg, #ffd89b, #f39c12);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.caterbook-logo--sidebar-v .caterbook-mark-svg {
+    filter: drop-shadow(0 4px 12px rgba(243,156,18,0.35));
+}
+
+.caterbook-logo--sidebar-v .caterbook-tagline-inline {
+    color: rgba(255,255,255,0.4);
+}
+
+/* Shine animation on Book */
+@keyframes caterbook-glow {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(243,156,18,0.3)); }
+    50% { filter: drop-shadow(0 0 16px rgba(243,156,18,0.55)); }
+}
+
+.caterbook-logo--md .caterbook-book,
+.caterbook-logo--lg .caterbook-book,
+.caterbook-logo--hero .caterbook-book {
+    animation: caterbook-glow 3.5s ease-in-out infinite;
+}
+
+/* Context overrides */
+.navbar-brand.caterbook-logo-wrap {
+    padding: 0;
+    margin-right: 0.75rem;
+}
+
+.footer-brand .caterbook-logo {
+    margin-bottom: 0.5rem;
+}
+
+.admin-brand .caterbook-logo,
+.panel-brand .caterbook-logo {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.panel-brand .caterbook-logo,
+.admin-brand .caterbook-logo {
+    padding: 0.15rem 0;
+}
+
+.auth-logo .caterbook-logo {
+    justify-content: center;
+}
+
+.auth-logo .caterbook-tagline-sep,
+.auth-logo .caterbook-tagline-inline {
+    display: none;
+}
+
+@media (max-width: 400px) {
+    .caterbook-logo--md .caterbook-wordmark { font-size: 1.25rem; }
+    .caterbook-logo--md .caterbook-mark-svg { width: 32px; height: 32px; }
+    .caterbook-tagline-inline { display: none; }
+    .caterbook-tagline-sep { display: none; }
+}
+
+@media (max-width: 991px) {
+    .panel-brand .caterbook-tagline-inline,
+    .panel-brand .caterbook-tagline-sep {
+        display: none;
+    }
+}

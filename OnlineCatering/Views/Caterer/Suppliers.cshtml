@@ -1,0 +1,41 @@
+@model IEnumerable<Supplier>
+@{ ViewData["Title"] = "Suppliers"; ViewData["Subtitle"] = $"{Model.Count()} supplier(s)"; }
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel-card">
+            <div class="panel-card-header"><h6><i class="bi bi-truck"></i> Supplier List</h6></div>
+            <div class="panel-table-wrap">
+                <table class="table panel-table mb-0">
+                    <thead><tr><th>Supplier</th><th>Contact</th><th>Phone</th><th>Email</th></tr></thead>
+                    <tbody>
+                        @foreach (var s in Model)
+                        {
+                            <tr>
+                                <td><strong>@s.SupplierName</strong></td>
+                                <td>@s.ContactPerson</td>
+                                <td>@s.Phone</td>
+                                <td>@s.Email</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header"><h6><i class="bi bi-plus-circle"></i> Add Supplier</h6></div>
+            <div class="panel-card-body-padded">
+                <form asp-action="AddSupplier" method="post">
+                    <div class="mb-3"><label class="form-label">Supplier Name</label><input name="SupplierName" class="form-control" required /></div>
+                    <div class="mb-3"><label class="form-label">Contact Person</label><input name="ContactPerson" class="form-control" /></div>
+                    <div class="mb-3"><label class="form-label">Phone</label><input name="Phone" class="form-control" /></div>
+                    <div class="mb-3"><label class="form-label">Email</label><input name="Email" class="form-control" type="email" /></div>
+                    <div class="mb-3"><label class="form-label">Address</label><input name="Address" class="form-control" /></div>
+                    <button type="submit" class="panel-btn panel-btn-accent w-100 justify-content-center py-2">Add Supplier</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

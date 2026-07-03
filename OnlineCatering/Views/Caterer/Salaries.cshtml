@@ -1,0 +1,43 @@
+@model IEnumerable<WorkerSalary>
+@{ ViewData["Title"] = "Salaries"; ViewData["Subtitle"] = "Worker salary records"; var workers = ViewBag.Workers as IEnumerable<Worker> ?? Enumerable.Empty<Worker>(); }
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel-card">
+            <div class="panel-card-header"><h6><i class="bi bi-cash-coin"></i> Salary Records</h6></div>
+            <div class="panel-table-wrap">
+                <table class="table panel-table mb-0">
+                    <thead><tr><th>Worker</th><th>Month/Year</th><th>Days</th><th>Total Pay</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @foreach (var s in Model)
+                        {
+                            <tr>
+                                <td><strong>@s.Worker?.FullName</strong></td>
+                                <td>@s.PayMonth/@s.PayYear</td>
+                                <td>@s.WorkingDays</td>
+                                <td>Rs. @s.TotalPay.ToString("N0")</td>
+                                <td><span class="panel-badge panel-badge-info">@s.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header"><h6><i class="bi bi-plus-circle"></i> Add Salary</h6></div>
+            <div class="panel-card-body-padded">
+                <form asp-action="AddSalary" method="post">
+                    <div class="mb-3"><label class="form-label">Worker</label><select name="WorkerId" class="form-select" required>@foreach (var w in workers){<option value="@w.WorkerId">@w.FullName</option>}</select></div>
+                    <div class="mb-3"><label class="form-label">Working Days</label><input name="WorkingDays" type="number" class="form-control" min="1" required /></div>
+                    <div class="row">
+                        <div class="col-6 mb-3"><label class="form-label">Month</label><input name="PayMonth" type="number" min="1" max="12" class="form-control" value="@DateTime.Now.Month" /></div>
+                        <div class="col-6 mb-3"><label class="form-label">Year</label><input name="PayYear" type="number" class="form-control" value="@DateTime.Now.Year" /></div>
+                    </div>
+                    <button type="submit" class="panel-btn panel-btn-accent w-100 justify-content-center py-2">Save Salary</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+@model IEnumerable<SupplierOrder>
+@{ ViewData["Title"] = "Supplier Orders"; var suppliers = ViewBag.Suppliers as IEnumerable<Supplier> ?? Enumerable.Empty<Supplier>(); var materials = ViewBag.Materials as IEnumerable<RawMaterial> ?? Enumerable.Empty<RawMaterial>(); }
+<partial name="_PageHeader" />
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            @foreach (var o in Model)
+            {
+                <div class="card mb-3 p-3 border-0">
+                    <div class="d-flex justify-content-between"><strong>@o.SuppOrderNo</strong><span>@o.OrderDate.ToString("dd MMM yyyy")</span></div>
+                    <p class="small text-muted mb-1">Supplier: @o.Supplier?.SupplierName · Rs. @o.EstimatedAmount.ToString("N0") · @o.Status</p>
+                    @if (!o.InvoiceDone)
+                    {
+                        <form asp-action="GenerateSuppInvoice" method="post" class="mt-2"><input type="hidden" name="orderId" value="@o.SupplierOrderId" /><button class="btn btn-sm btn-accent">Generate Invoice</button></form>
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-lg-4">
+            <div class="card p-4 border-0">
+                <h5 class="fw-bold mb-3">New Supplier Order</h5>
+                <form asp-action="CreateSupplierOrder" method="post">
+                    <div class="mb-3"><label class="form-label">Supplier</label><select name="supplierId" class="form-select" required>@foreach(var s in suppliers){<option value="@s.SupplierId">@s.SupplierName</option>}</select></div>
+                    <div class="mb-3"><label class="form-label">Ingredient</label><select name="rawMaterialId" class="form-select" required>@foreach(var m in materials){<option value="@m.RawMaterialId">@m.MaterialName</option>}</select></div>
+                    <div class="mb-3"><label class="form-label">Quantity (kg)</label><input name="quantity" type="number" step="0.01" class="form-control" required /></div>
+                    <div class="mb-3"><label class="form-label">Rate per Kg</label><input name="ratePerKg" type="number" step="0.01" class="form-control" required /></div>
+                    <button type="submit" class="btn btn-accent w-100">Create Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

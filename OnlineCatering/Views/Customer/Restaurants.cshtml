@@ -1,0 +1,245 @@
+@model IEnumerable<Caterer>
+@using OnlineCatering.ViewModels
+@using OnlineCatering.Services
+@{
+    ViewData["Title"] = "All Restaurants & Caterers";
+    ViewData["Subtitle"] = "Browse complete list — no name needed, just pick your favorite";
+    var browse = ViewBag.Browse as CatererBrowseViewModel ?? new CatererBrowseViewModel();
+    var cities = ViewBag.Cities as string[] ?? Array.Empty<string>();
+    var areas = ViewBag.Areas as string[] ?? Array.Empty<string>();
+    var totalCount = (int)(ViewBag.TotalCount ?? Model.Count());
+    var isCustomer = Context.Session.GetString("UserType") == "Customer";
+}
+
+<partial name="_PageHeader" />
+
+<section class="section-dark pt-0">
+    <div class="container pb-5">
+        <div class="browse-hero reveal-up mb-4">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-8">
+                    <span class="script-tag d-inline">Explore</span>
+                    <h4 class="fw-bold mb-2 text-white">Browse All Catering Services</h4>
+                    <p class="text-muted mb-0">Don't know the name? No problem — filter by city, area or food type and book directly.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <span class="browse-count-badge"><i class="bi bi-building me-1"></i>@totalCount Services</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="browse-filters reveal-up mb-4">
+            <form asp-action="Restaurants" method="get" id="browseForm">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small mb-2">Filter by City</label>
+                    <div class="city-chips">
+                        <a asp-action="Restaurants" asp-route-FoodType="@browse.FoodType" asp-route-SortBy="@browse.SortBy"
+                           class="city-chip @(string.IsNullOrEmpty(browse.City) ? "active" : "")">All Cities</a>
+                        @foreach (var city in cities)
+                        {
+                            <a asp-action="Restaurants" asp-route-City="@city" asp-route-FoodType="@browse.FoodType" asp-route-SortBy="@browse.SortBy"
+                               class="city-chip @(browse.City == city ? "active" : "")">@city</a>
+                        }
+                    </div>
+                </div>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Area</label>
+                        <select name="Area" id="browseArea" class="form-select search-filter-select rounded-3">
+                            <option value="">All Areas</option>
+                            @foreach (var area in areas)
+                            {
+                                if (browse.Area == area)
+                                {
+                                    <option value="@area" selected="selected">@area</option>
+                                }
+                                else
+                                {
+                                    <option value="@area">@area</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Food Type</label>
+                        <select name="FoodType" class="form-select search-filter-select rounded-3">
+                            @if (browse.FoodType == "All" || string.IsNullOrEmpty(browse.FoodType))
+                            {
+                                <option value="All" selected="selected">All Types</option>
+                            }
+                            else
+                            {
+                                <option value="All">All Types</option>
+                            }
+                            @if (browse.FoodType == "Veg")
+                            {
+                                <option value="Veg" selected="selected">Vegetarian</option>
+                            }
+                            else
+                            {
+                                <option value="Veg">Vegetarian</option>
+                            }
+                            @if (browse.FoodType == "Non-Veg")
+                            {
+                                <option value="Non-Veg" selected="selected">Non-Vegetarian</option>
+                            }
+                            else
+                            {
+                                <option value="Non-Veg">Non-Vegetarian</option>
+                            }
+                            @if (browse.FoodType == "Both")
+                            {
+                                <option value="Both" selected="selected">Both</option>
+                            }
+                            else
+                            {
+                                <option value="Both">Both</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Sort By</label>
+                        <select name="SortBy" class="form-select search-filter-select rounded-3">
+                            @if (browse.SortBy == "Rating")
+                            {
+                                <option value="Rating" selected="selected">Top Rated</option>
+                            }
+                            else
+                            {
+                                <option value="Rating">Top Rated</option>
+                            }
+                            @if (browse.SortBy == "Name")
+                            {
+                                <option value="Name" selected="selected">Name (A–Z)</option>
+                            }
+                            else
+                            {
+                                <option value="Name">Name (A–Z)</option>
+                            }
+                            @if (browse.SortBy == "City")
+                            {
+                                <option value="City" selected="selected">City</option>
+                            }
+                            else
+                            {
+                                <option value="City">City</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="hidden" name="City" id="browseCityHidden" value="@browse.City" />
+                        <button type="submit" class="btn-glow w-100 justify-content-center"><i class="bi bi-funnel"></i> Apply Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 reveal-up flex-wrap gap-2">
+            <p class="text-muted mb-0"><strong class="text-white">@Model.Count()</strong> catering service(s) shown</p>
+            <a asp-action="Search" class="btn-glass btn-sm"><i class="bi bi-search"></i> Advanced Search</a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="restaurant-empty reveal-up">
+                <i class="bi bi-shop"></i>
+                <h5>No caterers found</h5>
+                <p class="text-muted">Try changing city or food type filters.</p>
+                <a asp-action="Restaurants" class="btn-glow mt-2">Show All</a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4 reveal-up">
+                @{ var idx = 0; }
+                @foreach (var caterer in Model)
+                {
+                    var img = CatererImageHelper.GetImageUrl(caterer, idx);
+                    var foodClass = caterer.FoodType.Replace("-", "").ToLower();
+                    idx++;
+                    <div class="col-sm-6 col-xl-4">
+                        <article class="restaurant-card-v2">
+                            <div class="restaurant-card-v2-img">
+                                @{ ViewData["CatererImageAlt"] = caterer.BusinessName; }
+                                <partial name="_CatererImage" model="@img" />
+                                <div class="restaurant-card-v2-img-overlay"></div>
+                                <span class="restaurant-card-v2-food food-@foodClass">@caterer.FoodType</span>
+                                <span class="restaurant-card-v2-rating"><i class="bi bi-star-fill"></i> @caterer.Rating</span>
+                            </div>
+                            <div class="restaurant-card-v2-body">
+                                <div class="restaurant-card-v2-head">
+                                    <h5>@caterer.BusinessName</h5>
+                                    <span class="restaurant-card-v2-id">#@caterer.CatererId</span>
+                                </div>
+                                <p class="restaurant-card-v2-location">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    @caterer.City
+                                    @if (!string.IsNullOrEmpty(caterer.Area))
+                                    {
+                                        <span class="area-badge">@caterer.Area</span>
+                                    }
+                                </p>
+                                <p class="restaurant-card-v2-desc">
+                                    @(string.IsNullOrEmpty(caterer.Description) ? "Premium catering service for weddings, corporate & private events." : (caterer.Description.Length > 95 ? caterer.Description[..95] + "..." : caterer.Description))
+                                </p>
+                                <div class="restaurant-card-v2-tags">
+                                    <span><i class="bi bi-people-fill"></i> @caterer.MinGuests–@caterer.MaxGuests guests</span>
+                                    <span><i class="bi bi-telephone-fill"></i> @caterer.Phone</span>
+                                </div>
+                                <div class="restaurant-card-v2-actions">
+                                    <a asp-action="CatererDetails" asp-route-id="@caterer.CatererId" class="btn-glass btn-sm flex-fill justify-content-center">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                    @if (isCustomer)
+                                    {
+                                        <a asp-action="Book" asp-route-catererId="@caterer.CatererId" class="btn-glow btn-sm flex-fill justify-content-center">
+                                            <i class="bi bi-calendar-plus"></i> Book
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Account" asp-action="Login" class="btn-glow btn-sm flex-fill justify-content-center">
+                                            <i class="bi bi-box-arrow-in-right"></i> Login
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    const areasByCity = @Html.Raw(ViewBag.AreasJson ?? "{}");
+    const cityHidden = document.getElementById('browseCityHidden');
+    const areaSel = document.getElementById('browseArea');
+    const selectedArea = '@(browse.Area ?? "")';
+
+    function refreshBrowseAreas() {
+        const city = cityHidden?.value || '';
+        const areas = city && areasByCity[city] ? areasByCity[city] : Object.values(areasByCity).flat();
+        const unique = [...new Set(areas)].sort();
+        if (!areaSel) return;
+        areaSel.innerHTML = '<option value="">All Areas</option>';
+        unique.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a; opt.textContent = a;
+            if (a === selectedArea) opt.selected = true;
+            areaSel.appendChild(opt);
+        });
+    }
+
+    document.querySelectorAll('.city-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            cityHidden.value = chip.textContent.trim() === 'All Cities' ? '' : chip.textContent.trim();
+            refreshBrowseAreas();
+        });
+    });
+
+    refreshBrowseAreas();
+</script>
+}

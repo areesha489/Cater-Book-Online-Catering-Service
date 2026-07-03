@@ -1,0 +1,14 @@
+@{ ViewData["Title"] = "System Modules"; ViewData["Subtitle"] = "Complete module list"; }
+<partial name="_PageHeader" />
+<div class="container pb-5">
+    <p class="lead text-center mb-4">Online Catering System — 13 Integrated Modules</p>
+    <div class="row g-3">
+        @foreach (var m in new[] { "Login Module","Customer Management","Caterer Management","Search Caterer Module","Booking Module","Billing & Payment Module","Favorite Caterer Module","Messaging Module","Menu Management Module","Supplier Management Module","Worker Management Module","Invoice Management Module","Salary Management Module" })
+        {
+            <div class="col-md-6 col-lg-4"><div class="feature-card"><i class="bi bi-check-circle text-success me-2"></i>@m</div></div>
+        }
+    </div>
+    <div class="text-center mt-4">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-primary-custom">Login to Access</a>
+    </div>
+</div>

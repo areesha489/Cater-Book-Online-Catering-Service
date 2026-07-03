@@ -1,0 +1,44 @@
+@model IEnumerable<FavoriteCaterer>
+@using OnlineCatering.Services
+@{ ViewData["Title"] = "Favorites"; ViewData["Subtitle"] = $"{Model.Count()} saved caterer(s)"; }
+
+@if (!Model.Any())
+{
+    <div class="panel-card">
+        <div class="panel-empty">
+            <i class="bi bi-heart"></i>
+            <p>No favorites yet. Browse caterers and save your favorites!</p>
+            <a asp-action="Restaurants" class="panel-btn panel-btn-accent">Browse Restaurants</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var fav in Model)
+        {
+            var img = fav.Caterer != null ? CatererImageHelper.GetImageUrl(fav.Caterer, fav.CatererId) : CatererImageHelper.FallbackUrl;
+            <div class="col-md-6 col-lg-4">
+                <div class="panel-fav-card">
+                    <div class="panel-fav-img">
+                        @{ ViewData["CatererImageAlt"] = fav.Caterer?.BusinessName ?? "Caterer"; }
+                        <partial name="_CatererImage" model="@img" />
+                    </div>
+                    <div class="fav-body">
+                        <h5 class="fw-bold mb-1">@fav.Caterer?.BusinessName</h5>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-geo-alt"></i> @fav.Caterer?.City
+                            @if (!string.IsNullOrEmpty(fav.Caterer?.Area)) { <span class="area-badge">@fav.Caterer.Area</span> }
+                        </p>
+                        <span class="panel-badge panel-badge-accent mb-2">@fav.Caterer?.FoodType</span>
+                        <p class="small text-muted mb-0">@fav.Caterer?.Description</p>
+                    </div>
+                    <div class="fav-footer d-flex gap-2">
+                        <a asp-action="CatererDetails" asp-route-id="@fav.CatererId" class="panel-btn panel-btn-view flex-grow-1 justify-content-center">View</a>
+                        <a asp-action="Book" asp-route-catererId="@fav.CatererId" class="panel-btn panel-btn-accent flex-grow-1 justify-content-center">Book</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

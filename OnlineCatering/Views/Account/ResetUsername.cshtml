@@ -1,0 +1,32 @@
+@model ResetUsernameViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Reset Username";
+    ViewData["AuthTitle"] = "Change Username";
+    ViewData["AuthSubtitle"] = "Update your customer login username";
+}
+
+<form asp-action="ResetUsername" method="post" novalidate>
+    <div asp-validation-summary="ModelOnly" class="auth-error-summary"></div>
+    <div class="mb-3">
+        <label asp-for="CurrentUsername" class="form-label"></label>
+        <input asp-for="CurrentUsername" class="form-control auth-input" />
+        <span asp-validation-for="CurrentUsername" class="auth-field-error"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control auth-input" />
+        <span asp-validation-for="Password" class="auth-field-error"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NewUsername" class="form-label"></label>
+        <input asp-for="NewUsername" class="form-control auth-input" />
+        <span asp-validation-for="NewUsername" class="auth-field-error"></span>
+    </div>
+    <button type="submit" class="btn-glow w-100 justify-content-center mb-2"><i class="bi bi-person-check"></i> Update Username</button>
+    <a asp-action="Login" class="btn-glass w-100 justify-content-center btn-sm"><i class="bi bi-arrow-left"></i> Back to Login</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

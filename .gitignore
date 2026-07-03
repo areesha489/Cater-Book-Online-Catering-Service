@@ -1,0 +1,28 @@
+# Build output
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.rsuser
+
+# Environment and local config
+.env
+.env.*
+*.local
+
+# Logs
+*.log
+logs/
+
+# Office temporary files
+~$*
+
+# OS files
+Thumbs.db
+.DS_Store

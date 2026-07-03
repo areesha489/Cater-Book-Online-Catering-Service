@@ -1,0 +1,384 @@
+@model IEnumerable<Caterer>
+@using OnlineCatering.Models
+@using OnlineCatering.Services
+@{
+    ViewData["Title"] = "Home";
+    var cities = ViewBag.Cities as string[] ?? Array.Empty<string>();
+    var announcements = ViewBag.Announcements as IEnumerable<SiteAnnouncement> ?? Enumerable.Empty<SiteAnnouncement>();
+    var catererList = Model.ToList();
+}
+
+<!-- Hero with Video -->
+<section class="hero-v2" id="hero">
+    <div class="hero-video-wrap">
+        <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1555244167-5d48f4f42b3b?w=1600&q=80">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-chef-preparing-a-dish-with-fire-4169-large.mp4" type="video/mp4" />
+        </video>
+    </div>
+    <div class="hero-v2-overlay"></div>
+
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 reveal-up">
+                <span class="script-tag">Premium Catering</span>
+                <h1 class="hero-v2-title">Experience the Taste of Every Celebration</h1>
+                <p class="hero-v2-text">Book Pakistan's best caterers for weddings, corporate events & parties. Easypaisa, JazzCash & bank payments — all on CaterBook.</p>
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <a asp-controller="Customer" asp-action="Restaurants" class="btn-glow"><i class="bi bi-shop"></i> Discover Our Caterers</a>
+                    <a asp-controller="Account" asp-action="RegisterCustomer" class="btn-glass"><i class="bi bi-person-plus"></i> Get Started</a>
+                </div>
+                <form asp-controller="Customer" asp-action="Search" method="get" class="hero-search-glass mt-4">
+                    <h6 class="text-white fw-bold mb-3"><i class="bi bi-funnel text-warning me-2"></i>Quick Search</h6>
+                    <div class="row g-2">
+                        <div class="col-6 col-lg-4">
+                            <label class="form-label small mb-1" for="heroCity">City</label>
+                            <select name="City" id="heroCity" class="form-select form-select-sm">
+                                <option value="">All Cities</option>
+                                @foreach (var c in cities)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-6 col-lg-4">
+                            <label class="form-label small mb-1" for="heroArea">Area</label>
+                            <select name="Area" id="heroArea" class="form-select form-select-sm">
+                                <option value="">All Areas</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-lg-4">
+                            <label class="form-label small mb-1" for="heroFoodType">Food Type</label>
+                            <select name="FoodType" id="heroFoodType" class="form-select form-select-sm">
+                                <option value="All">All Food</option>
+                                <option value="Veg">Veg</option>
+                                <option value="Non-Veg">Non-Veg</option>
+                                <option value="Both">Both</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-lg-4">
+                            <label class="form-label small mb-1" for="heroGuestCount">Guests</label>
+                            <input name="GuestCount" id="heroGuestCount" type="number" min="50" class="form-control form-control-sm" placeholder="Min 50" />
+                        </div>
+                        <div class="col-12 col-lg-8">
+                            <label class="form-label small mb-1" for="heroSearchTerm">Caterer Name</label>
+                            <input name="SearchTerm" id="heroSearchTerm" type="text" class="form-control form-control-sm" placeholder="Search by business name..." />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn-glow w-100 btn-sm justify-content-center"><i class="bi bi-search me-1"></i>Search Caterers</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 reveal-up">
+                <div class="hero-visual">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Fresh catering bowl" class="hero-circle-img" data-parallax="0.08" />
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=150&q=80" alt="" class="float-food float-food-1" data-parallax="0.15" />
+                    <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=160&h=160&fit=crop&crop=center&q=85" alt="Fresh food plate" class="float-food float-food-2" data-parallax="0.12" />
+                    <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=130&q=80" alt="" class="float-food float-food-3" data-parallax="0.18" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Promo Banner -->
+<section class="promo-banner reveal-up">
+    <div class="container">
+        <h3><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Book catering online with exciting discounts on first booking!</h3>
+        <div class="promo-badge">20% OFF</div>
+    </div>
+</section>
+
+@if (announcements.Any())
+{
+    <section class="py-3" style="background:#111">
+        <div class="container">
+            <div id="announcementCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner text-center">
+                    @{ var ai = 0; }
+                    @foreach (var ann in announcements)
+                    {
+                        <div class="carousel-item @(ai == 0 ? "active" : "")">
+                            <span class="text-warning"><i class="bi bi-megaphone-fill me-2"></i><strong>@ann.Title</strong> — @ann.Message</span>
+                        </div>
+                        ai++;
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<!-- Stats -->
+<section class="section-dark pt-0">
+    <div class="container">
+        <div class="row g-3 reveal-up">
+            @foreach (var (num, label, suffix) in new[] { ("150","Verified Caterers","+"), ("5000","Events Catered","+"), ("98","Happy Customers","%"), ("25","Cities Covered","+") })
+            {
+                <div class="col-6 col-md-3">
+                    <div class="stats-glass">
+                        <div class="stats-number" data-count="@num" data-suffix="@suffix">0</div>
+                        <div class="stats-label">@label</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Featured Caterers Zigzag -->
+<section class="section-dark">
+    <div class="container">
+        <div class="text-center mb-5 reveal-up">
+            <span class="script-tag d-inline">Our Specials</span>
+            <h2 class="section-title">Featured Catering Services</h2>
+            <p class="text-muted mx-auto" style="max-width:520px">Top-rated caterers handpicked for quality, taste & reliable service.</p>
+        </div>
+        @{ var zi = 0; }
+        @foreach (var caterer in catererList.Take(4))
+        {
+            var img = CatererImageHelper.GetImageUrl(caterer, zi);
+            <div class="glass-card-row @(zi % 2 == 1 ? "reverse" : "") reveal-up">
+                <div class="glass-card-img">
+                    @{ ViewData["CatererImageAlt"] = caterer.BusinessName; }
+                    <partial name="_CatererImage" model="@img" />
+                </div>
+                <div class="glass-card-body">
+                    <span class="panel-badge panel-badge-accent mb-2">@caterer.FoodType</span>
+                    <h4>@caterer.BusinessName</h4>
+                    <p class="text-muted mb-2"><i class="bi bi-geo-alt text-warning"></i> @caterer.City @(string.IsNullOrEmpty(caterer.Area) ? "" : "· " + caterer.Area)</p>
+                    <p class="text-muted small">@(caterer.Description.Length > 120 ? caterer.Description[..120] + "..." : caterer.Description)</p>
+                    <div class="glass-card-price"><i class="bi bi-star-fill text-warning"></i> @caterer.Rating · @caterer.MinGuests–@caterer.MaxGuests guests</div>
+                    <a asp-controller="Customer" asp-action="CatererDetails" asp-route-id="@caterer.CatererId" class="btn-glow btn-sm"><i class="bi bi-arrow-right"></i> View & Book</a>
+                </div>
+            </div>
+            zi++;
+        }
+    </div>
+</section>
+
+<!-- Menu Category Slider -->
+<section class="section-dark" style="background:#080808">
+    <div class="container">
+        <div class="text-center mb-4 reveal-up">
+            <span class="script-tag d-inline">Choose Menu</span>
+            <h2 class="section-title">Popular Dishes</h2>
+        </div>
+        <div class="menu-tabs reveal-up" id="menuTabs">
+            @foreach (var tab in new[] { "All", "Dinner", "Lunch", "BBQ", "Starters", "Desserts", "Beverages" })
+            {
+                <button type="button" class="menu-tab @(tab == "All" ? "active" : "")" data-filter="@tab">@tab</button>
+            }
+        </div>
+        <div class="menu-slider-wrap reveal-up">
+            <button type="button" class="slider-btn prev" id="menuPrev" aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+            <div class="menu-slider" id="menuSlider">
+                @foreach (var (name, price, cat) in DishImageHelper.HomeSliderItems)
+                {
+                    var img = DishImageHelper.GetImageUrl(name);
+                    <div class="menu-slide-item" data-category="@cat">
+                        <img src="@img" alt="@name" loading="lazy" onerror="this.onerror=null;this.src='@DishImageHelper.DefaultUrl';" />
+                        <h6>@name</h6>
+                        <div class="price">@price</div>
+                        <a asp-controller="Customer" asp-action="Restaurants" class="btn btn-sm btn-glow mt-2 w-100 justify-content-center" style="font-size:0.75rem;padding:0.4rem">Order</a>
+                    </div>
+                }
+            </div>
+            <button type="button" class="slider-btn next" id="menuNext" aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+</section>
+
+<!-- Video Showcase -->
+<section class="section-dark">
+    <div class="container">
+        <div class="row align-items-center g-4 reveal-up">
+            <div class="col-lg-5">
+                <span class="script-tag">Live Kitchen</span>
+                <h2 class="section-title">Fresh Food, Live Preparation</h2>
+                <p class="text-muted">Our partner caterers prepare every dish fresh at your venue — from sizzling BBQ to aromatic biryani.</p>
+                <a asp-controller="Customer" asp-action="Restaurants" class="btn-glow mt-2"><i class="bi bi-play-circle"></i> Explore Caterers</a>
+            </div>
+            <div class="col-lg-7">
+                <div class="video-showcase">
+                    <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-person-decorating-a-cake-4392-large.mp4" type="video/mp4" />
+                    </video>
+                    <div class="video-showcase-overlay">
+                        <i class="bi bi-play-btn-fill fs-1 text-warning mb-2"></i>
+                        <h3>Watch Catering Excellence</h3>
+                        <p class="text-white-50 mb-0 small">Premium service for every event</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section-dark" style="background:#080808">
+    <div class="container">
+        <div class="text-center mb-4 reveal-up">
+            <span class="script-tag d-inline">Testimonials</span>
+            <h2 class="section-title">What They Say</h2>
+        </div>
+        <div class="testimonial-slider reveal-up" id="testimonialSlider">
+            @foreach (var (quote, name, role, avatar) in new[] {
+                ("CaterBook made our wedding catering effortless. Booked in minutes, paid via JazzCash, and the food was amazing!", "Ayesha Khan", "Wedding Client", "https://i.pravatar.cc/100?img=1"),
+                ("As a caterer, this platform helped me manage bookings, menu and invoices all in one place. Highly recommended!", "Ahmed Hassan", "Caterer Partner", "https://i.pravatar.cc/100?img=12"),
+                ("Corporate event for 200 guests — found the perfect caterer by area search. Professional service throughout.", "Sara Malik", "Corporate HR", "https://i.pravatar.cc/100?img=5"),
+                ("Easypaisa payment was smooth. Got instant booking confirmation and the invoice was auto-generated.", "Bilal Qureshi", "Birthday Event", "https://i.pravatar.cc/100?img=8")
+            })
+            {
+                <div class="testimonial-card">
+                    <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                    <p>"@quote"</p>
+                    <div class="testimonial-user">
+                        <img src="@avatar" alt="@name" />
+                        <div><strong>@name</strong><small>@role</small></div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-3">
+            <button type="button" class="slider-btn prev d-inline-flex mx-1" id="testPrev" style="position:static;transform:none"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="slider-btn next d-inline-flex mx-1" id="testNext" style="position:static;transform:none"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+</section>
+
+<!-- Meet Chefs / Top Caterers -->
+<section class="section-dark">
+    <div class="container">
+        <div class="text-center mb-5 reveal-up">
+            <span class="script-tag d-inline">Our Partners</span>
+            <h2 class="section-title">Meet Top Caterers</h2>
+        </div>
+        <div class="chef-showcase reveal-up">
+            <div>
+                <div class="chef-main-img" id="chefMain">
+                    <img src="@(catererList.FirstOrDefault() != null ? CatererImageHelper.GetImageUrl(catererList.First(), 0) : CatererImageHelper.FallbackUrl)" alt="Featured caterer" id="chefMainImg" onerror="this.onerror=null;this.src='@CatererImageHelper.FallbackUrl';" />
+                </div>
+                <div class="chef-thumbs" id="chefThumbs">
+                    @{ var ti = 0; }
+                    @foreach (var c in catererList.Take(4))
+                    {
+                        <div class="chef-thumb @(ti == 0 ? "active" : "")" data-img="@CatererImageHelper.GetImageUrl(c, ti)" data-name="@c.BusinessName" data-desc="@(c.Description.Length > 150 ? c.Description[..150] + "..." : c.Description)">
+                            <img src="@CatererImageHelper.GetImageUrl(c, ti)" alt="@c.BusinessName" onerror="this.onerror=null;this.src='@CatererImageHelper.FallbackUrl';" />
+                        </div>
+                        ti++;
+                    }
+                </div>
+            </div>
+            <div>
+                <h3 class="text-white fw-bold mb-3" id="chefName">@(catererList.FirstOrDefault()?.BusinessName ?? "Royal Feast Caterers")</h3>
+                <p class="text-muted mb-4" id="chefDesc">@(catererList.FirstOrDefault()?.Description ?? "Premium catering partners delivering unforgettable dining experiences.")</p>
+                <div class="row g-3 mb-4">
+                    <div class="col-6"><div class="stats-glass py-3"><div class="stats-number" style="font-size:1.5rem">@(catererList.Count)+</div><div class="stats-label">Caterers</div></div></div>
+                    <div class="col-6"><div class="stats-glass py-3"><div class="stats-number" style="font-size:1.5rem">4.8</div><div class="stats-label">Avg Rating</div></div></div>
+                </div>
+                <a asp-controller="Customer" asp-action="Restaurants" class="btn-glow">View All Caterers</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- All Caterers Grid -->
+<section class="section-dark" style="background:#080808">
+    <div class="container reveal-up">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+                <span class="section-tag">Top Rated</span>
+                <h2 class="section-title mb-0">Featured Caterers</h2>
+            </div>
+            <a asp-controller="Customer" asp-action="Restaurants" class="btn-glass btn-sm">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row g-4">
+            @{ var idx = 0; }
+            @foreach (var caterer in catererList)
+            {
+                var img = CatererImageHelper.GetImageUrl(caterer, idx);
+                idx++;
+                <div class="col-md-6 col-lg-4">
+                    <div class="caterer-card-pro">
+                        <div class="caterer-card-img">
+                            @{ ViewData["CatererImageAlt"] = caterer.BusinessName; }
+                            <partial name="_CatererImage" model="@img" />
+                            <span class="caterer-card-badge">@caterer.FoodType</span>
+                            <span class="caterer-rating-badge"><i class="bi bi-star-fill"></i> @caterer.Rating</span>
+                        </div>
+                        <div class="caterer-card-body">
+                            <h5 class="fw-bold mb-1">@caterer.BusinessName</h5>
+                            <p class="text-muted small mb-2"><i class="bi bi-geo-alt"></i> @caterer.City @if(!string.IsNullOrEmpty(caterer.Area)){<span class="area-badge">@caterer.Area</span>}</p>
+                            <p class="text-muted small mb-3">@(caterer.Description.Length > 80 ? caterer.Description[..80] + "..." : caterer.Description)</p>
+                            <a asp-controller="Customer" asp-action="CatererDetails" asp-route-id="@caterer.CatererId" class="btn-glow btn-sm w-100 justify-content-center">View & Book</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section-dark">
+    <div class="container reveal-up">
+        <div class="text-center mb-5">
+            <span class="section-tag">Simple Process</span>
+            <h2 class="section-title">How CaterBook Works</h2>
+        </div>
+        <div class="row g-4">
+            @foreach (var (num, title, desc) in new[] {
+                ("1", "Browse Caterers", "Explore full restaurant list or search by city & area."),
+                ("2", "Select Menu", "Pick dishes and enter your event details."),
+                ("3", "Pay Online", "Easypaisa, JazzCash or Bank Account."),
+                ("4", "Enjoy Event", "Caterer delivers. Invoice auto-generated.")
+            })
+            {
+                <div class="col-6 col-md-3">
+                    <div class="step-card text-center p-4 rounded-4">
+                        <div class="step-number">@num</div>
+                        <h6 class="fw-bold">@title</h6>
+                        <p class="text-muted small mb-0">@desc</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section-dark pb-5">
+    <div class="container reveal-up">
+        <div class="cta-banner text-center" style="background:linear-gradient(135deg,#1a1a2e,#2d1f14);border:1px solid rgba(243,156,18,0.2)">
+            <h2 class="display-font fw-bold mb-3 text-white">Are You a Professional Caterer?</h2>
+            <p class="mb-4 opacity-75 mx-auto text-white-50" style="max-width:500px">Join CaterBook to manage menus, bookings, staff & grow your business online.</p>
+            <a asp-controller="Account" asp-action="RegisterCaterer" class="btn-glow btn-lg"><i class="bi bi-shop"></i> Register as Caterer</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    const areasByCity = @Html.Raw(ViewBag.AreasJson ?? "{}");
+    const heroCity = document.getElementById('heroCity');
+    const heroArea = document.getElementById('heroArea');
+
+    function refreshHeroAreas() {
+        if (!heroCity || !heroArea) return;
+        const city = heroCity.value;
+        const areas = city && areasByCity[city] ? areasByCity[city] : Object.values(areasByCity).flat();
+        const unique = [...new Set(areas)].sort();
+        heroArea.innerHTML = '<option value="">All Areas</option>';
+        unique.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a;
+            opt.textContent = a;
+            heroArea.appendChild(opt);
+        });
+    }
+
+    heroCity?.addEventListener('change', refreshHeroAreas);
+    refreshHeroAreas();
+</script>
+}

@@ -1,0 +1,132 @@
+@model CustOrder
+@{
+    ViewData["Title"] = "Booking Details";
+    ViewData["Subtitle"] = Model.BookingId;
+    var statusClass = Model.OrderStatus switch {
+        "Completed" => "admin-badge-success",
+        "Cancelled" => "admin-badge-danger",
+        "Confirmed" => "admin-badge-info",
+        "In Progress" => "admin-badge-purple",
+        _ => "admin-badge-warning"
+    };
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="admin-card mb-4">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-flag-fill"></i> Booking Status</h6>
+                <span class="admin-badge @statusClass">@Model.OrderStatus</span>
+            </div>
+            <div class="admin-card-body-padded">
+                <partial name="_StatusTimeline" model="Model" />
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="admin-card h-100">
+                    <div class="admin-card-header">
+                        <h6><i class="bi bi-calendar-event"></i> Event Details</h6>
+                    </div>
+                    <div class="admin-card-body-padded">
+                        <ul class="admin-info-list">
+                            <li><span class="label">Event Type</span><span class="value">@Model.EventType</span></li>
+                            <li><span class="label">Event Date</span><span class="value">@Model.EventDate.ToString("dd MMM yyyy")</span></li>
+                            <li><span class="label">Venue</span><span class="value">@Model.EventVenue</span></li>
+                            <li><span class="label">Guests</span><span class="value">@Model.GuestCount</span></li>
+                            <li><span class="label">Booked On</span><span class="value">@Model.OrderDate.ToString("dd MMM yyyy")</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="admin-card h-100">
+                    <div class="admin-card-header">
+                        <h6><i class="bi bi-credit-card"></i> Payment Info</h6>
+                    </div>
+                    <div class="admin-card-body-padded">
+                        <ul class="admin-info-list">
+                            <li>
+                                <span class="label">Status</span>
+                                <span class="value">
+                                    <span class="admin-badge @(Model.PaymentStatus == "Paid" ? "admin-badge-success" : "admin-badge-warning")">@Model.PaymentStatus</span>
+                                </span>
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.PaymentMethod))
+                            {
+                                <li><span class="label">Method</span><span class="value">@Model.PaymentMethod</span></li>
+                                <li><span class="label">Reference</span><span class="value"><small>@Model.PaymentReference</small></span></li>
+                            }
+                            <li><span class="label">Total</span><span class="value text-success">Rs. @Model.TotalAmount.ToString("N0")</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-list-ul"></i> Order Items</h6>
+                <span class="admin-badge admin-badge-secondary">@Model.OrderItems.Count items</span>
+            </div>
+            <div class="admin-card-body">
+                <div class="admin-table-wrap">
+                    <table class="table admin-table mb-0">
+                        <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th class="text-end">Total</th></tr></thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <tr>
+                                    <td><strong>@item.MenuItem?.ItemName</strong></td>
+                                    <td>@item.Quantity</td>
+                                    <td>Rs. @item.UnitPrice</td>
+                                    <td class="text-end">Rs. @item.LineTotal.ToString("N0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold border-0 pt-3">Grand Total</td>
+                                <td class="text-end fw-bold text-success border-0 pt-3">Rs. @Model.TotalAmount.ToString("N0")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="admin-card mb-4">
+            <div class="admin-profile-card">
+                <div class="admin-profile-avatar"><i class="bi bi-person-fill"></i></div>
+                <h6>@Model.Customer?.FullName</h6>
+                <span class="admin-badge admin-badge-info mb-2">Customer</span>
+                <div class="meta">
+                    @Model.Customer?.Email<br />
+                    @Model.Customer?.Phone<br />
+                    <i class="bi bi-geo-alt"></i> @Model.Customer?.City
+                </div>
+            </div>
+        </div>
+        <div class="admin-card mb-4">
+            <div class="admin-profile-card">
+                <div class="admin-profile-avatar" style="background:linear-gradient(135deg,#1b6b4a,#2d9a6a)"><i class="bi bi-shop"></i></div>
+                <h6>@Model.Caterer?.BusinessName</h6>
+                <span class="admin-badge admin-badge-purple mb-2">Caterer</span>
+                <div class="meta">
+                    @Model.Caterer?.City
+                    @if (!string.IsNullOrEmpty(Model.Caterer?.Area))
+                    {
+                        <span class="area-badge">@Model.Caterer.Area</span>
+                    }
+                    <br />@Model.Caterer?.Phone
+                </div>
+            </div>
+        </div>
+        <a asp-action="AllBookings" class="admin-btn admin-btn-view w-100 justify-content-center py-2">
+            <i class="bi bi-arrow-left"></i> Back to Bookings
+        </a>
+    </div>
+</div>

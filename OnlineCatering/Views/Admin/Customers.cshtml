@@ -1,0 +1,54 @@
+@model IEnumerable<Customer>
+@{ ViewData["Title"] = "Customers"; ViewData["Subtitle"] = $"{Model.Count()} registered customers"; }
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6><i class="bi bi-people-fill"></i> Customer List</h6>
+        <span class="admin-badge admin-badge-info">@Model.Count() Total</span>
+    </div>
+    <div class="admin-card-body">
+        <div class="admin-table-wrap">
+            <table class="table admin-table mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td><span class="text-muted">#@c.CustomerId</span></td>
+                            <td><strong>@c.FullName</strong></td>
+                            <td>@c.Email</td>
+                            <td>@c.Phone</td>
+                            <td>@c.City</td>
+                            <td>
+                                <span class="admin-badge @(c.IsActive ? "admin-badge-success" : "admin-badge-secondary")">
+                                    @(c.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="admin-actions justify-content-end">
+                                    <form asp-action="ToggleCustomer" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@c.CustomerId" />
+                                        <button type="submit" class="admin-btn admin-btn-toggle"><i class="bi bi-toggle-on"></i> Toggle</button>
+                                    </form>
+                                    <form asp-action="DeleteCustomer" method="post" class="d-inline" onsubmit="return confirm('Delete this customer?');">
+                                        <input type="hidden" name="id" value="@c.CustomerId" />
+                                        <button type="submit" class="admin-btn admin-btn-delete"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

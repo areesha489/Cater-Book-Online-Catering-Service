@@ -1,0 +1,117 @@
+@model Caterer
+@using OnlineCatering.Services
+@{ ViewData["Title"] = "Business Profile"; ViewData["Subtitle"] = "Update your catering business details"; }
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header"><h6><i class="bi bi-building-gear"></i> Business Information</h6></div>
+            <div class="panel-card-body-padded">
+        <form asp-action="Profile" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="CatererId" />
+            <partial name="_RestaurantImageUpload" model="Model" />
+            <div class="mb-3">
+                <label asp-for="BusinessName" class="form-label"></label>
+                <input asp-for="BusinessName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="OwnerName" class="form-label"></label>
+                <input asp-for="OwnerName" class="form-control" />
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="City" class="form-label"></label>
+                    <select asp-for="City" id="profileCity" class="form-select">
+                        @foreach (var city in (ViewBag.Cities as string[] ?? Array.Empty<string>()))
+                        {
+                            <option value="@city">@city</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Area" class="form-label"></label>
+                    <select asp-for="Area" id="profileArea" class="form-select"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FoodType" class="form-label"></label>
+                    <select asp-for="FoodType" class="form-select">
+                        <option value="Veg">Veg</option>
+                        <option value="Non-Veg">Non-Veg</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="MinGuests" class="form-label"></label>
+                    <input asp-for="MinGuests" class="form-control" type="number" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="MaxGuests" class="form-label"></label>
+                    <input asp-for="MaxGuests" class="form-control" type="number" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="CancellationChargePercent" class="form-label"></label>
+                    <input asp-for="CancellationChargePercent" class="form-control" type="number" step="0.1" />
+                </div>
+            </div>
+            <button type="submit" class="panel-btn panel-btn-accent px-4 py-2">Save Profile</button>
+            <a asp-action="Dashboard" class="panel-btn panel-btn-outline px-4 py-2">Back</a>
+        </form>
+        <hr class="my-4" />
+        <form asp-action="DeleteProfile" method="post" onsubmit="return confirm('Delete caterer profile permanently?');">
+            <button type="submit" class="panel-btn panel-btn-delete px-4 py-2"><i class="bi bi-trash me-1"></i>Delete Profile</button>
+        </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    const areasByCity = @Html.Raw(ViewBag.AreasJson ?? "{}");
+    const citySel = document.getElementById('profileCity');
+    const areaSel = document.getElementById('profileArea');
+    const currentArea = '@Model.Area';
+    function refreshAreas() {
+        const areas = areasByCity[citySel.value] || [];
+        areaSel.innerHTML = '';
+        areas.forEach(a => {
+            const o = document.createElement('option');
+            o.value = a; o.textContent = a;
+            if (a === currentArea) o.selected = true;
+            areaSel.appendChild(o);
+        });
+    }
+    citySel?.addEventListener('change', refreshAreas);
+    refreshAreas();
+
+    const fileInput = document.getElementById('restaurantImage');
+    const previewImg = document.getElementById('restaurantPreviewImg');
+    fileInput?.addEventListener('change', e => {
+        const file = e.target.files?.[0];
+        if (file && previewImg) {
+            previewImg.src = URL.createObjectURL(file);
+        }
+    });
+</script>
+}

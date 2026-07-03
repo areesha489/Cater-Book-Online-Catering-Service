@@ -1,0 +1,34 @@
+@{ ViewData["Title"] = "Modules"; ViewData["Subtitle"] = "All 13 system modules"; }
+<div class="row g-3 g-xl-4">
+    @{
+        var modules = new (string Name, string Desc, string Link, string Icon)[] {
+            ("Login Module", "Customer, Caterer & Admin login, password reset", "Account/Login", "bi-box-arrow-in-right"),
+            ("Customer Management", "Register, profile update & delete", "Customer/Profile", "bi-person-gear"),
+            ("Caterer Management", "Business profile & menu management", "Caterer/Profile", "bi-shop"),
+            ("Search Caterer", "Search by city, area, food type, guests", "Customer/Search", "bi-search"),
+            ("Booking Module", "Select menu, auto bill, booking ID", "Customer/Book", "bi-calendar-plus"),
+            ("Billing & Payment", "Easypaisa, JazzCash & Bank Account", "Customer/Payment", "bi-wallet2"),
+            ("Favorite Caterer", "Add, view, remove favorites", "Customer/Favorites", "bi-heart-fill"),
+            ("Messaging Module", "Send, read, reply, delete messages", "Customer/Messages", "bi-chat-dots-fill"),
+            ("Menu Management", "Categories & food items CRUD", "Caterer/MenuCategories", "bi-journal-text"),
+            ("Supplier Management", "Suppliers, orders & invoices", "Caterer/SupplierOrders", "bi-truck"),
+            ("Worker Management", "Staff registration & types", "Caterer/Workers", "bi-people-fill"),
+            ("Invoice Management", "Customer & supplier invoices", "Caterer/Invoices", "bi-receipt"),
+            ("Salary Management", "Worker salary records", "Caterer/Salaries", "bi-cash-coin")
+        };
+    }
+    @foreach (var (name, desc, link, icon) in modules)
+    {
+        var parts = link.Split('/');
+        <div class="col-sm-6 col-lg-4">
+            <div class="admin-card admin-module-card">
+                <div class="admin-module-icon"><i class="bi @icon"></i></div>
+                <h6>@name</h6>
+                <p>@desc</p>
+                <a asp-controller="@parts[0]" asp-action="@parts[1]" class="admin-module-link">
+                    Open module <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    }
+</div>

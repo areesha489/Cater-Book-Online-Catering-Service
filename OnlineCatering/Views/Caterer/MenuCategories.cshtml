@@ -1,0 +1,58 @@
+@model IEnumerable<MenuCategory>
+@{ ViewData["Title"] = "Menu Management"; ViewData["Subtitle"] = $"{Model.Count()} categories"; }
+
+<div class="d-flex justify-content-end mb-3">
+    <a asp-action="AddCategory" class="panel-btn panel-btn-accent"><i class="bi bi-plus-lg"></i> Add Category</a>
+</div>
+
+@foreach (var category in Model)
+{
+    <div class="panel-menu-block">
+        <div class="panel-card-header">
+            <div>
+                <h6 class="mb-0">@category.CategoryName</h6>
+                <small class="text-muted">@category.Description</small>
+            </div>
+            <div class="panel-actions">
+                <a asp-action="AddMenuItem" asp-route-categoryId="@category.CategoryId" class="panel-btn panel-btn-accent">Add Item</a>
+                <a asp-action="EditCategory" asp-route-id="@category.CategoryId" class="panel-btn panel-btn-view">Edit</a>
+                <form asp-action="DeleteCategory" method="post" class="d-inline" onsubmit="return confirm('Delete category and all items?');">
+                    <input type="hidden" name="id" value="@category.CategoryId" />
+                    <button type="submit" class="panel-btn panel-btn-delete"><i class="bi bi-trash"></i></button>
+                </form>
+            </div>
+        </div>
+        @if (!category.MenuItems.Any())
+        {
+            <div class="panel-card-body-padded text-muted">No menu items in this category.</div>
+        }
+        else
+        {
+            <div class="panel-table-wrap">
+                <table class="table panel-table mb-0">
+                    <thead><tr><th>Item</th><th>Price/Plate</th><th>Type</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+                    <tbody>
+                        @foreach (var item in category.MenuItems)
+                        {
+                            <tr>
+                                <td><strong>@item.ItemName</strong><br /><small class="text-muted">@item.Description</small></td>
+                                <td>Rs. @item.PricePerPlate</td>
+                                <td><span class="panel-badge panel-badge-secondary">@(item.IsVeg ? "Veg" : "Non-Veg")</span></td>
+                                <td><span class="panel-badge @(item.IsAvailable ? "panel-badge-success" : "panel-badge-warning")">@(item.IsAvailable ? "Available" : "Unavailable")</span></td>
+                                <td class="text-end">
+                                    <div class="panel-actions justify-content-end">
+                                        <a asp-action="EditMenuItem" asp-route-id="@item.MenuId" class="panel-btn panel-btn-view">Edit</a>
+                                        <form asp-action="DeleteMenuItem" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.MenuId" />
+                                            <button type="submit" class="panel-btn panel-btn-delete"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}

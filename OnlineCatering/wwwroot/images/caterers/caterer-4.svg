@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Biryani House">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1508"/>
+      <stop offset="100%" stop-color="#3d2e14"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4a017"/>
+      <stop offset="100%" stop-color="#f39c12"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <ellipse cx="300" cy="260" rx="130" ry="35" fill="url(#g)" opacity="0.9"/>
+  <ellipse cx="300" cy="248" rx="115" ry="28" fill="#f4d03f" opacity="0.7"/>
+  <circle cx="250" cy="240" r="10" fill="#8b4513" opacity="0.6"/>
+  <circle cx="300" cy="235" r="8" fill="#c0392b" opacity="0.5"/>
+  <circle cx="350" cy="242" r="9" fill="#27ae60" opacity="0.4"/>
+  <text x="300" y="355" text-anchor="middle" fill="#f39c12" font-family="Arial,sans-serif" font-size="20" font-weight="bold">Al-Rehman Biryani</text>
+</svg>

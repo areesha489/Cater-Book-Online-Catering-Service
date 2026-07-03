@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CaterBook Business</title>
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/logo.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/panel.css" asp-append-version="true" />
+</head>
+<body class="panel-body theme-caterer">
+    <div class="panel-overlay" id="panelOverlay"></div>
+
+    <aside class="panel-sidebar" id="panelSidebar">
+        <div class="panel-brand">
+            @{ ViewData["LogoSize"] = "sidebar"; ViewData["LogoVariant"] = "sidebar-v"; ViewData["LogoTagline"] = false; }
+            <partial name="_CaterBookLogo" />
+        </div>
+        <nav class="panel-nav">
+            @{
+                var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+                var bookingActions = new[] { "Bookings", "BookingDetails" };
+                var menuActions = new[] { "MenuCategories", "AddCategory", "EditCategory", "AddMenuItem", "EditMenuItem" };
+                var supplierActions = new[] { "Suppliers", "SupplierOrders", "SuppInvoices" };
+                var staffActions = new[] { "Workers", "Salaries" };
+            }
+            <div class="panel-nav-label">Main</div>
+            <a asp-action="Dashboard" class="panel-nav-link @(action == "Dashboard" ? "active" : "")"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a asp-action="Bookings" class="panel-nav-link @(bookingActions.Contains(action) ? "active" : "")"><i class="bi bi-calendar-check-fill"></i> Bookings</a>
+            <a asp-action="Invoices" class="panel-nav-link @(action is "Invoices" or "InvoiceDetails" ? "active" : "")"><i class="bi bi-receipt"></i> Invoices</a>
+            <a asp-action="Profile" class="panel-nav-link @(action == "Profile" ? "active" : "")"><i class="bi bi-building-gear"></i> Business Profile</a>
+
+            <div class="panel-nav-label">Menu</div>
+            <a asp-action="MenuCategories" class="panel-nav-link @(menuActions.Contains(action) ? "active" : "")"><i class="bi bi-journal-text"></i> Menu Management</a>
+            <a asp-action="RawMaterials" class="panel-nav-link @(action == "RawMaterials" ? "active" : "")"><i class="bi bi-box-seam"></i> Raw Materials</a>
+
+            <div class="panel-nav-label">Staff & Supply</div>
+            <a asp-action="Workers" class="panel-nav-link @(staffActions.Contains(action) ? "active" : "")"><i class="bi bi-people-fill"></i> Staff</a>
+            <a asp-action="Salaries" class="panel-nav-link @(action == "Salaries" ? "active" : "")"><i class="bi bi-cash-coin"></i> Salaries</a>
+            <a asp-action="Suppliers" class="panel-nav-link @(supplierActions.Contains(action) ? "active" : "")"><i class="bi bi-truck"></i> Suppliers</a>
+
+            <div class="panel-nav-label">Communication</div>
+            <a asp-action="Messages" class="panel-nav-link @(action is "Messages" or "MessageDetails" or "SendMessage" or "ReplyMessage" ? "active" : "")"><i class="bi bi-chat-dots-fill"></i> Messages</a>
+
+            <div class="panel-nav-label">Account</div>
+            <a asp-controller="Home" asp-action="Index" class="panel-nav-link"><i class="bi bi-house"></i> Back to Website</a>
+            <a asp-controller="Account" asp-action="Logout" class="panel-nav-link logout-link"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </nav>
+        <div class="panel-sidebar-footer">
+            <div class="panel-sidebar-user">
+                <i class="bi bi-shop"></i>
+                <div>
+                    <span>@(Context.Session.GetString("DisplayName") ?? "Caterer")</span>
+                    <small>Business Account</small>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="panel-main">
+        <header class="panel-topbar">
+            <button type="button" class="panel-topbar-toggle d-lg-none" id="panelToggle"><i class="bi bi-list fs-5"></i></button>
+            <div class="panel-topbar-info">
+                <h1 class="panel-page-title">@ViewData["Title"]</h1>
+                @if (ViewData["Subtitle"] != null) { <p class="panel-page-subtitle">@ViewData["Subtitle"]</p> }
+            </div>
+            <div class="panel-topbar-actions">
+                <a asp-action="Bookings" class="panel-btn panel-btn-accent d-none d-md-inline-flex"><i class="bi bi-calendar"></i> View Bookings</a>
+                <div class="panel-user-badge">
+                    <span class="avatar"><i class="bi bi-shop"></i></span>
+                    <span>@(Context.Session.GetString("DisplayName") ?? "Caterer")</span>
+                </div>
+            </div>
+        </header>
+        <main class="panel-content">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show"><i class="bi bi-check-circle me-2"></i>@TempData["Success"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show"><i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('panelSidebar');
+        const overlay = document.getElementById('panelOverlay');
+        document.getElementById('panelToggle')?.addEventListener('click', () => {
+            const open = sidebar?.classList.toggle('show');
+            overlay?.classList.toggle('show', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        });
+        overlay?.addEventListener('click', () => {
+            sidebar?.classList.remove('show');
+            overlay?.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

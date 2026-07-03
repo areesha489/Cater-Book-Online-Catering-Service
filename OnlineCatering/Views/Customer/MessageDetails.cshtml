@@ -1,0 +1,22 @@
+@model Message
+@{ ViewData["Title"] = "Message Details"; }
+<partial name="_PageHeader" />
+<div class="container pb-5">
+    <div class="col-lg-8 mx-auto card p-4">
+        <div class="d-flex justify-content-between mb-3">
+            <h5>@Model.Subject</h5>
+            <small class="text-muted">@Model.SentDate.ToString("dd MMM yyyy HH:mm")</small>
+        </div>
+        <p class="text-muted small">From: @Model.SenderType #@Model.SenderId → To: @Model.ReceiverType #@Model.ReceiverId</p>
+        <hr />
+        <p>@Model.Body</p>
+        <div class="d-flex gap-2 mt-4">
+            <a asp-action="ReplyMessage" asp-route-id="@Model.MessageId" class="btn btn-primary-custom btn-sm"><i class="bi bi-reply me-1"></i>Reply</a>
+            <form asp-action="DeleteMessage" method="post" class="d-inline" onsubmit="return confirm('Delete this message?');">
+                <input type="hidden" name="id" value="@Model.MessageId" />
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+            </form>
+            <a asp-action="Messages" class="btn btn-secondary btn-sm">Back</a>
+        </div>
+    </div>
+</div>

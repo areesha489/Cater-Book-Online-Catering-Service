@@ -1,0 +1,33 @@
+@model Customer
+@{ ViewData["Title"] = "My Profile"; ViewData["Subtitle"] = "Update your account details"; }
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header">
+                <h6><i class="bi bi-person-gear"></i> Profile Information</h6>
+            </div>
+            <div class="panel-card-body-padded">
+                <form asp-action="Profile" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label">Full Name</label><input asp-for="FullName" class="form-control" required /></div>
+                        <div class="col-md-6"><label class="form-label">Email</label><input asp-for="Email" class="form-control" type="email" /></div>
+                        <div class="col-md-6"><label class="form-label">Phone</label><input asp-for="Phone" class="form-control" /></div>
+                        <div class="col-md-6"><label class="form-label">Mobile</label><input asp-for="Mobile" class="form-control" /></div>
+                        <div class="col-12"><label class="form-label">Address</label><input asp-for="Address" class="form-control" /></div>
+                        <div class="col-md-6"><label class="form-label">City</label><input asp-for="City" class="form-control" /></div>
+                        <div class="col-md-6"><label class="form-label">Pin Code</label><input asp-for="PinCode" class="form-control" /></div>
+                    </div>
+                    <div class="mt-4 d-flex gap-2 flex-wrap">
+                        <button type="submit" class="panel-btn panel-btn-accent px-4 py-2"><i class="bi bi-check-lg"></i> Save Profile</button>
+                        <a asp-action="Dashboard" class="panel-btn panel-btn-outline px-4 py-2">Cancel</a>
+                    </div>
+                </form>
+                <hr class="my-4" />
+                <form asp-action="DeleteProfile" method="post" onsubmit="return confirm('Delete your profile permanently?');">
+                    <button type="submit" class="panel-btn panel-btn-delete px-4 py-2"><i class="bi bi-trash me-1"></i>Delete Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

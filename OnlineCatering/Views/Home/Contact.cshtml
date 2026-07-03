@@ -1,0 +1,54 @@
+@{ ViewData["Title"] = "Contact"; ViewData["Subtitle"] = "We'd love to hear from you"; }
+
+<partial name="_PageHeader" />
+
+<div class="container pb-5 contact-page">
+    <div class="row g-4 reveal">
+        <div class="col-lg-5">
+            <div class="card p-4 h-100 border-0">
+                <h4 class="fw-bold mb-4">Get in Touch</h4>
+                <div class="d-flex gap-3 mb-4">
+                    <div class="feature-icon-wrap flex-shrink-0" style="width:48px;height:48px;font-size:1.2rem;margin:0"><i class="bi bi-envelope"></i></div>
+                    <div><strong>Email</strong><br/><span class="text-muted">support@onlinecatering.com</span></div>
+                </div>
+                <div class="d-flex gap-3 mb-4">
+                    <div class="feature-icon-wrap flex-shrink-0" style="width:48px;height:48px;font-size:1.2rem;margin:0"><i class="bi bi-telephone"></i></div>
+                    <div><strong>Phone</strong><br/><span class="text-muted">+92 300 1234567</span></div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="feature-icon-wrap flex-shrink-0" style="width:48px;height:48px;font-size:1.2rem;margin:0"><i class="bi bi-geo-alt"></i></div>
+                    <div><strong>Location</strong><br/><span class="text-muted">Lahore, Pakistan</span></div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=500&q=80" alt="Kitchen" class="img-fluid rounded-3 mt-4" loading="lazy" />
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card p-4 border-0">
+                <h4 class="fw-bold mb-4">Send a Message</h4>
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" class="form-control rounded-3" placeholder="Your name" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control rounded-3" placeholder="you@email.com" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Subject</label>
+                            <input type="text" class="form-control rounded-3" placeholder="How can we help?" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Message</label>
+                            <textarea class="form-control rounded-3" rows="5" placeholder="Write your message..."></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary-custom"><i class="bi bi-send me-2"></i>Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

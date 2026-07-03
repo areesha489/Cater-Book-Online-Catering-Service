@@ -1,0 +1,7 @@
+@model string
+@* Usage: <partial name="_CatererImage" model="@imgUrl" /> or pass caterer via ViewData *@
+@{
+    var src = Model ?? CatererImageHelper.FallbackUrl;
+    var alt = ViewData["CatererImageAlt"]?.ToString() ?? "Restaurant";
+}
+<img src="@src" alt="@alt" loading="lazy" class="@(ViewData["CatererImageClass"])" onerror="this.onerror=null;this.src='@CatererImageHelper.FallbackUrl';" />

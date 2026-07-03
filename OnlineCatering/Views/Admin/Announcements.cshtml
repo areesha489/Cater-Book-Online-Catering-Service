@@ -1,0 +1,76 @@
+@model IEnumerable<SiteAnnouncement>
+@{ ViewData["Title"] = "Announcements"; ViewData["Subtitle"] = "Manage homepage banners & alerts"; }
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-plus-circle-fill"></i> New Announcement</h6>
+            </div>
+            <div class="admin-card-body-padded admin-form">
+                <form asp-action="SaveAnnouncement" method="post">
+                    <input type="hidden" name="AnnouncementId" value="0" />
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input name="Title" class="form-control" placeholder="e.g. Special Offer!" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea name="Message" class="form-control" rows="4" placeholder="Announcement details..." required></textarea>
+                    </div>
+                    <div class="form-check mb-4">
+                        <input type="checkbox" name="IsActive" value="true" class="form-check-input" checked id="newActive" />
+                        <label class="form-check-label" for="newActive">Show on homepage</label>
+                    </div>
+                    <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center py-2">
+                        <i class="bi bi-megaphone-fill"></i> Publish Announcement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-megaphone-fill"></i> All Announcements</h6>
+                <span class="admin-badge admin-badge-success">@Model.Count(a => a.IsActive) Live</span>
+            </div>
+            <div class="admin-card-body-padded">
+                @if (!Model.Any())
+                {
+                    <div class="admin-empty">
+                        <i class="bi bi-megaphone"></i>
+                        <p>No announcements yet. Create one to show on homepage.</p>
+                    </div>
+                }
+                @foreach (var a in Model)
+                {
+                    <div class="admin-announcement-item @(a.IsActive ? "live" : "hidden-item")">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <strong>@a.Title</strong>
+                                    @if (a.IsActive)
+                                    { <span class="admin-badge admin-badge-success">Live</span> }
+                                    else
+                                    { <span class="admin-badge admin-badge-secondary">Hidden</span> }
+                                </div>
+                                <p class="text-muted small mb-2">@a.Message</p>
+                                <small class="text-muted"><i class="bi bi-clock me-1"></i>@a.CreatedDate.ToString("dd MMM yyyy · HH:mm")</small>
+                            </div>
+                            <div class="admin-actions flex-shrink-0">
+                                <form asp-action="ToggleAnnouncement" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@a.AnnouncementId" />
+                                    <button type="submit" class="admin-btn admin-btn-toggle" title="Toggle visibility"><i class="bi bi-eye"></i></button>
+                                </form>
+                                <form asp-action="DeleteAnnouncement" method="post" class="d-inline" onsubmit="return confirm('Delete this announcement?');">
+                                    <input type="hidden" name="id" value="@a.AnnouncementId" />
+                                    <button type="submit" class="admin-btn admin-btn-delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

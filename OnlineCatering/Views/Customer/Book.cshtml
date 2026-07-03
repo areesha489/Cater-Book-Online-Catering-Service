@@ -1,0 +1,95 @@
+@model BookingViewModel
+@{ ViewData["Title"] = "Book Catering"; ViewData["Subtitle"] = Model.CatererName; }
+
+<div class="alert alert-warning rounded-3 mb-4">
+    <i class="bi bi-info-circle me-1"></i>
+    Book at least <strong>@ViewBag.MinAdvanceDays days</strong> ahead · Minimum <strong>@ViewBag.MinGuestCount guests</strong>
+</div>
+
+<form asp-action="Book" method="post">
+        <input type="hidden" asp-for="CatererId" />
+        <input type="hidden" asp-for="CatererName" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="panel-card panel-card-padded panel-form mb-4">
+                    <h5 class="fw-bold mb-3">Event Details</h5>
+                    <div class="mb-3">
+                        <label asp-for="EventDate" class="form-label"></label>
+                        <input asp-for="EventDate" class="form-control" type="date" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="EventType" class="form-label"></label>
+                        <select asp-for="EventType" class="form-select">
+                            <option>Wedding</option>
+                            <option>Birthday</option>
+                            <option>Anniversary</option>
+                            <option>Corporate Meeting</option>
+                            <option>College Function</option>
+                            <option>Farewell Party</option>
+                            <option>Freshers Party</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="EventVenue" class="form-label"></label>
+                        <input asp-for="EventVenue" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="GuestCount" class="form-label"></label>
+                        <input asp-for="GuestCount" class="form-control" type="number" min="50" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="SpecialInstructions" class="form-label"></label>
+                        <textarea asp-for="SpecialInstructions" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="panel-card panel-card-padded">
+                    <h5 class="fw-bold mb-3">Select Menu Items</h5>
+                    @for (int i = 0; i < Model.SelectedItems.Count; i++)
+                    {
+                        <div class="menu-item-row d-flex align-items-center">
+                            <input type="hidden" asp-for="SelectedItems[i].MenuId" />
+                            <input type="hidden" asp-for="SelectedItems[i].ItemName" />
+                            <input type="hidden" asp-for="SelectedItems[i].PricePerPlate" />
+                            <input type="hidden" asp-for="SelectedItems[i].CategoryId" />
+                            <input type="hidden" asp-for="SelectedItems[i].CategoryName" />
+                            <div class="form-check flex-grow-1">
+                                <input class="form-check-input menu-check" type="checkbox" asp-for="SelectedItems[i].IsSelected" data-price="@Model.SelectedItems[i].PricePerPlate" />
+                                <label class="form-check-label" asp-for="SelectedItems[i].IsSelected">
+                                    <strong>@Model.SelectedItems[i].ItemName</strong>
+                                    <small class="text-muted">(@Model.SelectedItems[i].CategoryName)</small>
+                                </label>
+                            </div>
+                            <span>Rs. @Model.SelectedItems[i].PricePerPlate / plate</span>
+                        </div>
+                    }
+                    <hr />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>Estimated Total: <span id="totalAmount" class="text-primary">Rs. 0</span></h5>
+                        <button type="submit" class="panel-btn panel-btn-accent btn-lg px-4 py-2">Proceed to Payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+@section Scripts {
+<script>
+    const guestInput = document.querySelector('[name="GuestCount"]');
+    function updateTotal() {
+        const guests = parseInt(guestInput.value) || 0;
+        let total = 0;
+        document.querySelectorAll('.menu-check:checked').forEach(cb => {
+            total += parseFloat(cb.dataset.price) * guests;
+        });
+        document.getElementById('totalAmount').textContent = 'Rs. ' + total.toLocaleString();
+    }
+    guestInput.addEventListener('input', updateTotal);
+    document.querySelectorAll('.menu-check').forEach(cb => cb.addEventListener('change', updateTotal));
+    updateTotal();
+</script>
+}

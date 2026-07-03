@@ -1,0 +1,60 @@
+@model IEnumerable<LoginMaster>
+@{ ViewData["Title"] = "Login Users"; ViewData["Subtitle"] = $"{Model.Count()} system accounts"; }
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6><i class="bi bi-key-fill"></i> Login Accounts</h6>
+        <span class="admin-badge admin-badge-success">@Model.Count(l => l.IsActive) Active</span>
+    </div>
+    <div class="admin-card-body">
+        <div class="admin-table-wrap">
+            <table class="table admin-table mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Type</th>
+                        <th>Ref ID</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var l in Model)
+                    {
+                        var typeClass = l.UserType switch {
+                            "Admin" => "admin-badge-danger",
+                            "Caterer" => "admin-badge-purple",
+                            _ => "admin-badge-info"
+                        };
+                        <tr>
+                            <td><span class="text-muted">#@l.LoginId</span></td>
+                            <td><strong>@l.Username</strong></td>
+                            <td><span class="admin-badge @typeClass">@l.UserType</span></td>
+                            <td>@l.ReferenceId</td>
+                            <td>
+                                <span class="admin-badge @(l.IsActive ? "admin-badge-success" : "admin-badge-secondary")">
+                                    @(l.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="admin-actions justify-content-end">
+                                    @if (l.UserType != "Admin")
+                                    {
+                                        <form asp-action="ToggleLogin" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@l.LoginId" />
+                                            <button type="submit" class="admin-btn admin-btn-toggle"><i class="bi bi-toggle-on"></i> Toggle</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Protected</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

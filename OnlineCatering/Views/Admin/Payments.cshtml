@@ -1,0 +1,84 @@
+@model IEnumerable<CustOrder>
+@{ ViewData["Title"] = "Payments"; ViewData["Subtitle"] = $"{Model.Count()} completed transactions"; }
+<div class="row g-3 g-xl-4 mb-4">
+    <div class="col-md-4">
+        <div class="admin-stat-card stat-green">
+            <div class="admin-stat-icon bg-success bg-opacity-10 text-success"><i class="bi bi-phone-fill"></i></div>
+            <div class="admin-stat-body">
+                <h3>Rs. @(((decimal)ViewBag.EasypaisaTotal).ToString("N0"))</h3>
+                <p>Easypaisa Revenue</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card stat-red">
+            <div class="admin-stat-icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-phone-vibrate-fill"></i></div>
+            <div class="admin-stat-body">
+                <h3>Rs. @(((decimal)ViewBag.JazzCashTotal).ToString("N0"))</h3>
+                <p>JazzCash Revenue</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card stat-indigo">
+            <div class="admin-stat-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-bank"></i></div>
+            <div class="admin-stat-body">
+                <h3>Rs. @(((decimal)ViewBag.BankTotal).ToString("N0"))</h3>
+                <p>Bank Account Revenue</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6><i class="bi bi-receipt"></i> Payment Transactions</h6>
+        <span class="admin-badge admin-badge-success">@Model.Count() Paid</span>
+    </div>
+    <div class="admin-card-body">
+        @if (!Model.Any())
+        {
+            <div class="admin-empty">
+                <i class="bi bi-wallet2"></i>
+                <p>No payment transactions yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="admin-table-wrap">
+                <table class="table admin-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer</th>
+                            <th>Caterer</th>
+                            <th>Method</th>
+                            <th>Reference</th>
+                            <th>Date</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var o in Model)
+                        {
+                            var payClass = o.PaymentMethod switch {
+                                "Easypaisa" => "admin-badge-easypaisa",
+                                "JazzCash" => "admin-badge-jazzcash",
+                                "Bank Account" => "admin-badge-bank",
+                                _ => "admin-badge-secondary"
+                            };
+                            <tr>
+                                <td><code>@o.BookingId</code></td>
+                                <td><strong>@o.Customer?.FullName</strong></td>
+                                <td>@o.Caterer?.BusinessName</td>
+                                <td><span class="admin-badge @payClass">@o.PaymentMethod</span></td>
+                                <td><small class="text-muted">@o.PaymentReference</small></td>
+                                <td>@o.OrderDate.ToString("dd MMM yyyy")</td>
+                                <td class="text-end"><strong class="text-success">Rs. @o.TotalAmount.ToString("N0")</strong></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,183 @@
+@{ ViewData["Title"] = "Dashboard"; ViewData["Subtitle"] = "System overview & analytics"; }
+
+<div class="admin-welcome">
+    <h2><i class="bi bi-stars me-2"></i>Welcome back, @(Context.Session.GetString("DisplayName") ?? "Admin")!</h2>
+    <p>Here's what's happening across your catering platform today.</p>
+</div>
+
+<div class="row g-3 g-xl-4 mb-4">
+    <div class="col-6 col-xl-3">
+        <div class="admin-stat-card stat-blue">
+            <div class="admin-stat-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-people-fill"></i></div>
+            <div class="admin-stat-body">
+                <h3>@ViewBag.Customers</h3>
+                <p>Total Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="admin-stat-card stat-green">
+            <div class="admin-stat-icon bg-success bg-opacity-10 text-success"><i class="bi bi-shop"></i></div>
+            <div class="admin-stat-body">
+                <h3>@ViewBag.Caterers</h3>
+                <p>Active Caterers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="admin-stat-card stat-purple">
+            <div class="admin-stat-icon bg-info bg-opacity-10 text-info"><i class="bi bi-calendar-check-fill"></i></div>
+            <div class="admin-stat-body">
+                <h3>@ViewBag.Bookings</h3>
+                <p>Total Bookings</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="admin-stat-card stat-orange">
+            <div class="admin-stat-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-cash-stack"></i></div>
+            <div class="admin-stat-body">
+                <h3>Rs. @(((decimal)ViewBag.Revenue).ToString("N0"))</h3>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 g-xl-4 mb-4">
+    @{
+        var ep = (int)ViewBag.EasypaisaCount;
+        var jc = (int)ViewBag.JazzCashCount;
+        var bk = (int)ViewBag.BankCount;
+        var pend = (int)ViewBag.PendingPayments;
+        var payTotal = Math.Max(ep + jc + bk, 1);
+    }
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-wallet2"></i> Payment Methods</h6>
+                <a asp-action="Payments" class="admin-btn admin-btn-view">View All</a>
+            </div>
+            <div class="admin-card-body-padded">
+                <div class="admin-payment-item">
+                    <div class="admin-payment-icon bg-success bg-opacity-10 text-success"><i class="bi bi-phone-fill"></i></div>
+                    <div class="admin-payment-info">
+                        <strong>Easypaisa</strong>
+                        <div class="admin-payment-bar"><div class="admin-payment-bar-fill bg-success" style="width:@(ep * 100 / payTotal)%"></div></div>
+                    </div>
+                    <span class="admin-payment-count">@ep</span>
+                </div>
+                <div class="admin-payment-item">
+                    <div class="admin-payment-icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-phone-vibrate-fill"></i></div>
+                    <div class="admin-payment-info">
+                        <strong>JazzCash</strong>
+                        <div class="admin-payment-bar"><div class="admin-payment-bar-fill bg-danger" style="width:@(jc * 100 / payTotal)%"></div></div>
+                    </div>
+                    <span class="admin-payment-count">@jc</span>
+                </div>
+                <div class="admin-payment-item">
+                    <div class="admin-payment-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-bank"></i></div>
+                    <div class="admin-payment-info">
+                        <strong>Bank Account</strong>
+                        <div class="admin-payment-bar"><div class="admin-payment-bar-fill bg-primary" style="width:@(bk * 100 / payTotal)%"></div></div>
+                    </div>
+                    <span class="admin-payment-count">@bk</span>
+                </div>
+                <div class="admin-payment-item">
+                    <div class="admin-payment-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="admin-payment-info">
+                        <strong>Pending Payments</strong>
+                        <div class="admin-payment-bar"><div class="admin-payment-bar-fill bg-warning" style="width:@(pend > 0 ? Math.Min(pend * 20, 100) : 0)%"></div></div>
+                    </div>
+                    <span class="admin-payment-count text-warning">@pend</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="admin-card h-100">
+            <div class="admin-card-header">
+                <h6><i class="bi bi-geo-alt-fill"></i> Top Areas</h6>
+                <a asp-action="AreasReport" class="admin-btn admin-btn-view">Full Report</a>
+            </div>
+            <div class="admin-card-body">
+                <div class="admin-table-wrap">
+                    <table class="table admin-table mb-0">
+                        <thead><tr><th>City</th><th>Area</th><th class="text-end">Caterers</th></tr></thead>
+                        <tbody>
+                            @foreach (dynamic a in ViewBag.TopAreas)
+                            {
+                                <tr>
+                                    <td><strong>@a.City</strong></td>
+                                    <td><span class="area-badge">@a.Area</span></td>
+                                    <td class="text-end"><span class="admin-badge admin-badge-info">@a.Count</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6><i class="bi bi-clock-history"></i> Recent Bookings</h6>
+        <a asp-action="AllBookings" class="admin-btn admin-btn-primary">View All Bookings</a>
+    </div>
+    <div class="admin-card-body">
+        <div class="admin-table-wrap">
+            <table class="table admin-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer</th>
+                        <th>Caterer</th>
+                        <th>Event Date</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th class="text-end">Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in (IEnumerable<CustOrder>)ViewBag.RecentBookings)
+                    {
+                        var statusClass = o.OrderStatus switch {
+                            "Completed" => "admin-badge-success",
+                            "Cancelled" => "admin-badge-danger",
+                            "Confirmed" => "admin-badge-info",
+                            "In Progress" => "admin-badge-purple",
+                            _ => "admin-badge-warning"
+                        };
+                        var payClass = o.PaymentMethod switch {
+                            "Easypaisa" => "admin-badge-easypaisa",
+                            "JazzCash" => "admin-badge-jazzcash",
+                            "Bank Account" => "admin-badge-bank",
+                            _ => "admin-badge-secondary"
+                        };
+                        <tr>
+                            <td><code>@o.BookingId</code></td>
+                            <td><strong>@o.Customer?.FullName</strong></td>
+                            <td>@o.Caterer?.BusinessName</td>
+                            <td>@o.EventDate.ToString("dd MMM yyyy")</td>
+                            <td><span class="admin-badge @statusClass">@o.OrderStatus</span></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(o.PaymentMethod))
+                                { <span class="admin-badge @payClass">@o.PaymentMethod</span> }
+                                else { <span class="text-muted">—</span> }
+                            </td>
+                            <td class="text-end"><strong>Rs. @o.TotalAmount.ToString("N0")</strong></td>
+                            <td>
+                                <div class="admin-actions">
+                                    <a asp-action="BookingDetails" asp-route-id="@o.OrderId" class="admin-btn admin-btn-view"><i class="bi bi-eye"></i> View</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

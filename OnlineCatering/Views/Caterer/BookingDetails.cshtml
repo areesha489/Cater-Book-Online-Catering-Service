@@ -1,0 +1,73 @@
+@model CustOrder
+@{ ViewData["Title"] = "Booking " + Model.BookingId; }
+
+<div class="page-header">
+    <div class="container">
+        <h1>Booking: @Model.BookingId</h1>
+        <span class="badge bg-info fs-6">@Model.OrderStatus</span>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card p-4">
+                <h5>Customer & Event</h5>
+                <table class="table table-borderless">
+                    <tr><td>Customer</td><td><strong>@Model.Customer?.FullName</strong></td></tr>
+                    <tr><td>Phone</td><td>@Model.Customer?.Phone</td></tr>
+                    <tr><td>Event</td><td>@Model.EventType</td></tr>
+                    <tr><td>Date</td><td>@Model.EventDate.ToString("dddd, dd MMMM yyyy")</td></tr>
+                    <tr><td>Venue</td><td>@Model.EventVenue</td></tr>
+                    <tr><td>Guests</td><td>@Model.GuestCount</td></tr>
+                    <tr><td>Total</td><td><strong>Rs. @Model.TotalAmount.ToString("N0")</strong></td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card p-4">
+                <h5>Order Items</h5>
+                <table class="table table-sm">
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.MenuItem?.ItemName</td>
+                            <td>@item.Quantity x Rs. @item.UnitPrice</td>
+                            <td>Rs. @item.LineTotal.ToString("N0")</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mt-4">
+        <h5>Update Status</h5>
+        <div class="d-flex gap-2 flex-wrap">
+            @foreach (var status in new[] { "Pending", "Confirmed", "In Progress", "Completed", "Cancelled" })
+            {
+                <form asp-action="UpdateBookingStatus" method="post">
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <input type="hidden" name="status" value="@status" />
+                    <button type="submit" class="btn btn-sm @(Model.OrderStatus == status ? "btn-primary" : "btn-outline-primary")">@status</button>
+                </form>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        @if (Model.Invoice == null && Model.OrderStatus == "Confirmed")
+        {
+            <form asp-action="GenerateInvoice" method="post">
+                <input type="hidden" name="orderId" value="@Model.OrderId" />
+                <button type="submit" class="btn btn-accent"><i class="bi bi-receipt me-1"></i>Generate Invoice</button>
+            </form>
+        }
+        @if (Model.Invoice != null)
+        {
+            <a asp-action="InvoiceDetails" asp-route-id="@Model.Invoice.InvoiceId" class="btn btn-accent">View Invoice</a>
+        }
+        <a asp-action="SendMessage" asp-route-receiverId="@Model.CustomerId" asp-route-receiverType="Customer" asp-route-receiverName="@Model.Customer?.FullName" class="btn btn-outline-primary">Message Customer</a>
+        <a asp-action="Bookings" class="btn btn-secondary">Back</a>
+    </div>
+</div>

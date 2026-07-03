@@ -1,0 +1,89 @@
+@model IEnumerable<CustOrder>
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Subtitle"] = (ViewBag.Caterer as Caterer)?.BusinessName ?? "Business overview";
+    var caterer = ViewBag.Caterer as Caterer;
+}
+
+<div class="panel-welcome">
+    <h2><i class="bi bi-shop me-2"></i>@caterer?.BusinessName</h2>
+    <p>Manage bookings, menu, staff, invoices and grow your catering business.</p>
+</div>
+
+<div class="panel-quick-links">
+    <a asp-action="Bookings" class="panel-quick-link"><i class="bi bi-calendar-check"></i> Bookings</a>
+    <a asp-action="MenuCategories" class="panel-quick-link"><i class="bi bi-journal-text"></i> Menu</a>
+    <a asp-action="Invoices" class="panel-quick-link"><i class="bi bi-receipt"></i> Invoices</a>
+    <a asp-action="Workers" class="panel-quick-link"><i class="bi bi-people"></i> Staff</a>
+    <a asp-action="Suppliers" class="panel-quick-link"><i class="bi bi-truck"></i> Suppliers</a>
+    <a asp-action="Messages" class="panel-quick-link"><i class="bi bi-chat"></i> Messages</a>
+</div>
+
+<div class="row g-3 g-xl-4 mb-4">
+    <div class="col-md-4">
+        <div class="panel-stat-card">
+            <div class="panel-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div><h3>@ViewBag.PendingOrders</h3><p>Pending Bookings</p></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel-stat-card">
+            <div class="panel-stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+            <div><h3>@ViewBag.ConfirmedOrders</h3><p>Confirmed Bookings</p></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel-stat-card">
+            <div class="panel-stat-icon"><i class="bi bi-cash-stack"></i></div>
+            <div><h3>Rs. @(((decimal)ViewBag.TotalRevenue).ToString("N0"))</h3><p>Total Revenue</p></div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <div class="panel-card-header">
+        <h6><i class="bi bi-clock-history"></i> Recent Bookings</h6>
+        <a asp-action="Bookings" class="panel-btn panel-btn-accent">All Bookings</a>
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="panel-empty">
+            <i class="bi bi-calendar-x"></i>
+            <p>No bookings yet. New orders will appear here.</p>
+        </div>
+    }
+    else
+    {
+    <div class="panel-table-wrap">
+        <table class="table panel-table mb-0">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Guests</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td><code>@order.BookingId</code></td>
+                        <td><strong>@order.Customer?.FullName</strong></td>
+                        <td>@order.EventType</td>
+                        <td>@order.EventDate.ToString("dd MMM yyyy")</td>
+                        <td>@order.GuestCount</td>
+                        <td><span class="panel-badge panel-badge-info">@order.OrderStatus</span></td>
+                        <td class="text-end">
+                            <a asp-action="BookingDetails" asp-route-id="@order.OrderId" class="panel-btn panel-btn-view">Manage</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CaterBook">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4622a"/>
+      <stop offset="100%" stop-color="#f4a261"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#1a1a2e"/>
+  <path d="M18 38h28v10a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V38z" fill="url(#g)"/>
+  <path d="M16 38h32v3H16z" fill="#fff" opacity=".9"/>
+  <path d="M32 14c-8 0-12 6-12 11v6h24v-6c0-5-4-11-12-11z" fill="url(#g)"/>
+  <ellipse cx="32" cy="14" rx="10" ry="3" fill="#f4a261" opacity=".85"/>
+  <path d="M26 22h12l-2 4H28z" fill="#fff" opacity=".35"/>
+</svg>

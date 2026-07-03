@@ -1,0 +1,190 @@
+@model IEnumerable<Caterer>
+@using OnlineCatering.ViewModels
+@using OnlineCatering.Services
+@{
+    ViewData["Title"] = "Find Caterers";
+    ViewData["Subtitle"] = "Search by city, area, food type, and guest count";
+    var search = ViewBag.Search as CatererSearchViewModel ?? new CatererSearchViewModel();
+    var cities = ViewBag.Cities as string[] ?? Array.Empty<string>();
+    var areas = ViewBag.Areas as string[] ?? Array.Empty<string>();
+    var foodType = string.IsNullOrEmpty(search.FoodType) ? "All" : search.FoodType;
+}
+
+<partial name="_PageHeader" />
+
+<div class="container pb-5">
+    <div class="search-box mb-5 reveal">
+        <h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2 text-warning"></i>Filter Caterers</h5>
+        <form asp-controller="Customer" asp-action="Search" method="get" class="row g-3" id="searchForm">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small" for="searchCity">City</label>
+                <select name="City" id="searchCity" class="form-select search-filter-select rounded-3">
+                    <option value="">All Cities</option>
+                    @foreach (var city in cities)
+                    {
+                        if (search.City == city)
+                        {
+                            <option value="@city" selected="selected">@city</option>
+                        }
+                        else
+                        {
+                            <option value="@city">@city</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small" for="searchArea">Area / Locality</label>
+                <select name="Area" id="searchArea" class="form-select search-filter-select rounded-3">
+                    <option value="">All Areas</option>
+                    @foreach (var area in areas)
+                    {
+                        if (search.Area == area)
+                        {
+                            <option value="@area" selected="selected">@area</option>
+                        }
+                        else
+                        {
+                            <option value="@area">@area</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold small" for="searchFoodType">Food Type</label>
+                <select name="FoodType" id="searchFoodType" class="form-select search-filter-select rounded-3">
+                    @if (foodType == "All")
+                    {
+                        <option value="All" selected="selected">All</option>
+                    }
+                    else
+                    {
+                        <option value="All">All</option>
+                    }
+                    @if (foodType == "Veg")
+                    {
+                        <option value="Veg" selected="selected">Veg</option>
+                    }
+                    else
+                    {
+                        <option value="Veg">Veg</option>
+                    }
+                    @if (foodType == "Non-Veg")
+                    {
+                        <option value="Non-Veg" selected="selected">Non-Veg</option>
+                    }
+                    else
+                    {
+                        <option value="Non-Veg">Non-Veg</option>
+                    }
+                    @if (foodType == "Both")
+                    {
+                        <option value="Both" selected="selected">Both</option>
+                    }
+                    else
+                    {
+                        <option value="Both">Both</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold small" for="searchGuestCount">Guests</label>
+                <input name="GuestCount" id="searchGuestCount" value="@(search.GuestCount?.ToString() ?? "")" type="number" min="50" class="form-control search-filter-input rounded-3" placeholder="Min 50" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold small" for="searchTerm">Name</label>
+                <input name="SearchTerm" id="searchTerm" value="@search.SearchTerm" class="form-control search-filter-input rounded-3" placeholder="Business name..." />
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary-custom"><i class="bi bi-search me-1"></i>Search Caterers</button>
+                <a asp-controller="Customer" asp-action="Search" class="btn btn-outline-secondary ms-2">Clear Filters</a>
+            </div>
+        </form>
+    </div>
+
+    <p class="text-muted mb-4 reveal"><strong>@Model.Count()</strong> caterer(s) found</p>
+
+    @if (!Model.Any())
+    {
+        <div class="restaurant-empty reveal">
+            <i class="bi bi-search"></i>
+            <h5>No caterers match your search</h5>
+            <p class="text-muted">Try changing city, area, food type, or guest count.</p>
+            <a asp-controller="Customer" asp-action="Search" class="btn-glow mt-2">Clear Filters</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 reveal">
+            @{ var idx = 0; }
+            @foreach (var caterer in Model)
+            {
+                var img = CatererImageHelper.GetImageUrl(caterer, idx);
+                idx++;
+                <div class="col-md-6 col-lg-4">
+                    <div class="caterer-card-pro">
+                        <div class="caterer-card-img">
+                            @{ ViewData["CatererImageAlt"] = caterer.BusinessName; }
+                            <partial name="_CatererImage" model="@img" />
+                            <span class="caterer-card-badge">@caterer.FoodType</span>
+                            <span class="caterer-rating-badge"><i class="bi bi-star-fill me-1"></i>@caterer.Rating</span>
+                        </div>
+                        @if (CatererImageHelper.IsRoyalFeast(caterer))
+                        {
+                            <div class="caterer-featured-dishes">
+                                <div class="featured-dish">
+                                    <img src="@CatererImageHelper.RoyalFeastMuttonKarahiUrl" alt="Mutton Karahi" loading="lazy" onerror="this.onerror=null;this.src='@DishImageHelper.DefaultUrl';" />
+                                    <span>Mutton Karahi</span>
+                                </div>
+                                <div class="featured-dish">
+                                    <img src="@CatererImageHelper.RoyalFeastSeekhKebabUrl" alt="Seekh Kebab" loading="lazy" onerror="this.onerror=null;this.src='@DishImageHelper.DefaultUrl';" />
+                                    <span>Seekh Kebab</span>
+                                </div>
+                            </div>
+                        }
+                        <div class="caterer-card-body">
+                            <h5 class="fw-bold mb-1">@caterer.BusinessName</h5>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-geo-alt me-1"></i>@caterer.City
+                                @if (!string.IsNullOrEmpty(caterer.Area))
+                                {
+                                    <span class="area-badge">@caterer.Area</span>
+                                }
+                            </p>
+                            <p class="text-muted small mb-2">@caterer.Description</p>
+                            <p class="small text-muted mb-3">Guests: @caterer.MinGuests–@caterer.MaxGuests · Cancel: @caterer.CancellationChargePercent%</p>
+                            <a asp-action="CatererDetails" asp-route-id="@caterer.CatererId" class="btn btn-primary-custom btn-sm w-100">View & Book</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+@section Scripts {
+<script>
+    const areasByCity = @Html.Raw(ViewBag.AreasJson ?? "{}");
+    const citySel = document.getElementById('searchCity');
+    const areaSel = document.getElementById('searchArea');
+    let selectedArea = '@(search.Area ?? "")';
+
+    function refreshAreas(preserveSelection) {
+        if (!citySel || !areaSel) return;
+        const city = citySel.value;
+        const areas = city && areasByCity[city] ? areasByCity[city] : Object.values(areasByCity).flat();
+        const unique = [...new Set(areas)].sort();
+        areaSel.innerHTML = '<option value="">All Areas</option>';
+        unique.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a;
+            opt.textContent = a;
+            if (preserveSelection && a === selectedArea) opt.selected = true;
+            areaSel.appendChild(opt);
+        });
+        if (!preserveSelection) selectedArea = '';
+    }
+
+    citySel?.addEventListener('change', () => refreshAreas(false));
+    refreshAreas(true);
+</script>
+}

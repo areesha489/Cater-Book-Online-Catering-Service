@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Spice Garden">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1a12"/>
+      <stop offset="100%" stop-color="#1b3d28"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#27ae60"/>
+      <stop offset="100%" stop-color="#2ecc71"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)"/>
+  <circle cx="300" cy="180" r="90" fill="url(#g)" opacity="0.2"/>
+  <ellipse cx="300" cy="285" rx="150" ry="25" fill="#000" opacity="0.3"/>
+  <circle cx="300" cy="200" r="70" fill="url(#g)" opacity="0.85"/>
+  <circle cx="270" cy="185" r="12" fill="#fff" opacity="0.5"/>
+  <circle cx="330" cy="195" r="10" fill="#fff" opacity="0.4"/>
+  <circle cx="300" cy="220" r="8" fill="#1b6b4a"/>
+  <text x="300" y="355" text-anchor="middle" fill="#2ecc71" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Spice Garden</text>
+</svg>

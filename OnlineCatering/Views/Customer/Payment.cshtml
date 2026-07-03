@@ -1,0 +1,94 @@
+@model PaymentViewModel
+@{ ViewData["Title"] = "Payment"; ViewData["Subtitle"] = $"Booking {Model.BookingId} · Rs. {Model.TotalAmount:N0}"; }
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="panel-card panel-form">
+            <div class="panel-card-header">
+                <h6><i class="bi bi-wallet2"></i> Complete Payment</h6>
+                <span class="panel-badge panel-badge-accent fs-6">Rs. @Model.TotalAmount.ToString("N0")</span>
+            </div>
+            <div class="panel-card-body-padded">
+                <form asp-action="Payment" method="post" id="payForm">
+                    <input type="hidden" asp-for="OrderId" />
+                    <input type="hidden" asp-for="BookingId" />
+                    <input type="hidden" asp-for="TotalAmount" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <label class="form-label fw-semibold mb-3">Select Payment Method</label>
+                    <div class="payment-methods mb-4">
+                        <label class="payment-method-card">
+                            <input type="radio" asp-for="PaymentMethod" value="Easypaisa" checked />
+                            <div class="pm-inner">
+                                <span class="pm-icon bg-success-subtle text-success"><i class="bi bi-phone"></i></span>
+                                <div>
+                                    <strong>Easypaisa</strong>
+                                    <small class="d-block text-muted">Mobile wallet payment</small>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="payment-method-card">
+                            <input type="radio" asp-for="PaymentMethod" value="JazzCash" />
+                            <div class="pm-inner">
+                                <span class="pm-icon bg-danger-subtle text-danger"><i class="bi bi-phone-vibrate"></i></span>
+                                <div>
+                                    <strong>JazzCash</strong>
+                                    <small class="d-block text-muted">Mobile wallet payment</small>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="payment-method-card">
+                            <input type="radio" asp-for="PaymentMethod" value="BankAccount" />
+                            <div class="pm-inner">
+                                <span class="pm-icon bg-primary-subtle text-primary"><i class="bi bi-bank"></i></span>
+                                <div>
+                                    <strong>Bank Account</strong>
+                                    <small class="d-block text-muted">IBAN / account transfer</small>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="mobileFields">
+                        <div class="mb-3">
+                            <label asp-for="MobileNumber" class="form-label"></label>
+                            <input asp-for="MobileNumber" class="form-control rounded-3" placeholder="03XXXXXXXXX" maxlength="11" />
+                            <span asp-validation-for="MobileNumber" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div id="bankFields" style="display:none">
+                        <div class="mb-3">
+                            <label asp-for="BankName" class="form-label"></label>
+                            <input asp-for="BankName" class="form-control rounded-3" placeholder="HBL, UBL, Meezan, Allied..." />
+                            <span asp-validation-for="BankName" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="AccountNumber" class="form-label"></label>
+                            <input asp-for="AccountNumber" class="form-control rounded-3" placeholder="Account / IBAN number" />
+                            <span asp-validation-for="AccountNumber" class="text-danger small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="AccountTitle" class="form-label"></label>
+                            <input asp-for="AccountTitle" class="form-control rounded-3" placeholder="Account holder name" />
+                            <span asp-validation-for="AccountTitle" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <p class="small text-muted"><i class="bi bi-shield-check me-1"></i>Simulated secure payment for demonstration.</p>
+                    <button type="submit" class="panel-btn panel-btn-accent w-100 py-2 justify-content-center btn-lg"><i class="bi bi-lock me-1"></i>Pay Rs. @Model.TotalAmount.ToString("N0")</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    function togglePaymentFields() {
+        const method = document.querySelector('[name="PaymentMethod"]:checked')?.value;
+        const isBank = method === 'BankAccount';
+        document.getElementById('mobileFields').style.display = isBank ? 'none' : 'block';
+        document.getElementById('bankFields').style.display = isBank ? 'block' : 'none';
+    }
+    document.querySelectorAll('[name="PaymentMethod"]').forEach(r => r.addEventListener('change', togglePaymentFields));
+    togglePaymentFields();
+</script>
+}

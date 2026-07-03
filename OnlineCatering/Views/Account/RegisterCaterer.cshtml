@@ -1,0 +1,141 @@
+@model CatererRegisterViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Caterer Registration";
+    ViewData["AuthTitle"] = "Register as Caterer";
+    ViewData["AuthSubtitle"] = "Join CaterBook and grow your catering business";
+    ViewData["AuthWide"] = true;
+    var cities = ViewBag.Cities as string[] ?? Array.Empty<string>();
+}
+
+<form asp-action="RegisterCaterer" method="post" enctype="multipart/form-data" novalidate>
+    <div asp-validation-summary="ModelOnly" class="auth-error-summary"></div>
+    <div class="mb-3">
+        <label asp-for="RestaurantImage" class="form-label"></label>
+        <input asp-for="RestaurantImage" type="file" class="form-control auth-input" accept="image/jpeg,image/png,image/webp" id="regRestaurantImage" />
+        <div class="form-text auth-muted small mt-1">JPG, PNG or WEBP — max 5 MB. Shown on your restaurant listing.</div>
+        <div class="auth-image-preview mt-2 d-none" id="regImagePreview">
+            <img src="" alt="Preview" id="regPreviewImg" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="BusinessName" class="form-label"></label>
+        <input asp-for="BusinessName" class="form-control auth-input" />
+        <span asp-validation-for="BusinessName" class="auth-field-error"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="OwnerName" class="form-label"></label>
+        <input asp-for="OwnerName" class="form-control auth-input" />
+        <span asp-validation-for="OwnerName" class="auth-field-error"></span>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control auth-input" />
+            <span asp-validation-for="Email" class="auth-field-error"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Phone" class="form-label"></label>
+            <input asp-for="Phone" class="form-control auth-input" placeholder="03XX XXXXXXX" />
+            <span asp-validation-for="Phone" class="auth-field-error"></span>
+        </div>
+    </div>
+    <div class="row g-3 mt-0">
+        <div class="col-md-6">
+            <label asp-for="City" class="form-label"></label>
+            <select asp-for="City" id="regCity" class="form-select auth-input">
+                <option value="">Select City</option>
+                @foreach (var city in cities)
+                {
+                    <option value="@city">@city</option>
+                }
+            </select>
+            <span asp-validation-for="City" class="auth-field-error"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Area" class="form-label"></label>
+            <select asp-for="Area" id="regArea" class="form-select auth-input">
+                <option value="">Select Area</option>
+            </select>
+            <span asp-validation-for="Area" class="auth-field-error"></span>
+        </div>
+    </div>
+    <div class="row g-3 mt-0">
+        <div class="col-md-6">
+            <label asp-for="FoodType" class="form-label"></label>
+            <select asp-for="FoodType" class="form-select auth-input">
+                <option value="Veg">Veg</option>
+                <option value="Non-Veg">Non-Veg</option>
+                <option value="Both">Both</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CancellationChargePercent" class="form-label"></label>
+            <input asp-for="CancellationChargePercent" class="form-control auth-input" type="number" step="0.1" />
+            <span asp-validation-for="CancellationChargePercent" class="auth-field-error"></span>
+        </div>
+    </div>
+    <div class="mb-3 mt-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control auth-input" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control auth-input" rows="3"></textarea>
+    </div>
+    <hr class="auth-divider" />
+    <div class="mb-3">
+        <label asp-for="Username" class="form-label"></label>
+        <input asp-for="Username" class="form-control auth-input" />
+        <span asp-validation-for="Username" class="auth-field-error"></span>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" class="form-control auth-input" />
+            <span asp-validation-for="Password" class="auth-field-error"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ConfirmPassword" class="form-label"></label>
+            <input asp-for="ConfirmPassword" class="form-control auth-input" />
+            <span asp-validation-for="ConfirmPassword" class="auth-field-error"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn-glow w-100 justify-content-center mt-3"><i class="bi bi-shop"></i> Register as Caterer</button>
+</form>
+
+<p class="text-center auth-muted small mt-3 mb-0">
+    Already registered? <a asp-action="Login" class="auth-link">Login here</a>
+</p>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const areasByCity = @Html.Raw(ViewBag.AreasJson ?? "{}");
+        const citySel = document.getElementById('regCity');
+        const areaSel = document.getElementById('regArea');
+        function refreshAreas() {
+            const areas = areasByCity[citySel.value] || [];
+            const current = areaSel.value;
+            areaSel.innerHTML = '<option value="">Select Area</option>';
+            areas.forEach(a => {
+                const o = document.createElement('option');
+                o.value = a; o.textContent = a;
+                if (a === current) o.selected = true;
+                areaSel.appendChild(o);
+            });
+        }
+        citySel?.addEventListener('change', refreshAreas);
+        if (citySel?.value) refreshAreas();
+
+        document.getElementById('regRestaurantImage')?.addEventListener('change', e => {
+            const file = e.target.files?.[0];
+            const wrap = document.getElementById('regImagePreview');
+            const img = document.getElementById('regPreviewImg');
+            if (file && wrap && img) {
+                img.src = URL.createObjectURL(file);
+                wrap.classList.remove('d-none');
+            }
+        });
+    </script>
+}

@@ -1,0 +1,34 @@
+@{
+    Layout = "_Layout";
+    var title = ViewData["AuthTitle"]?.ToString() ?? ViewData["Title"]?.ToString() ?? "Account";
+    var subtitle = ViewData["AuthSubtitle"]?.ToString() ?? "";
+    var showLogo = ViewData["AuthShowLogo"] as bool? ?? true;
+    var wide = ViewData["AuthWide"] as bool? ?? false;
+}
+
+<section class="auth-page">
+    <div class="auth-page-bg"></div>
+    <div class="container">
+        <div class="auth-card reveal-up @(wide ? "auth-card-wide" : "")">
+            @if (showLogo)
+            {
+                <div class="auth-logo text-center mb-4">
+                    @{ ViewData["LogoSize"] = "lg"; ViewData["LogoVariant"] = "light"; ViewData["LogoTagline"] = false; }
+                    <partial name="_CaterBookLogo" />
+                </div>
+            }
+            <div class="text-center mb-4">
+                <h1 class="auth-title">@title</h1>
+                @if (!string.IsNullOrEmpty(subtitle))
+                {
+                    <p class="auth-subtitle mb-0">@subtitle</p>
+                }
+            </div>
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}
