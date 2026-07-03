@@ -696,6 +696,44 @@ body.theme-dark .card.form-card {
     border-color: rgba(255,255,255,0.08);
 }
 
+body.theme-dark .caterer-detail-hero {
+    margin-bottom: 0 !important;
+}
+
+body.theme-dark .caterer-detail-header {
+    padding: 1.75rem 0 1.5rem !important;
+    margin-bottom: 1.5rem;
+}
+
+body.theme-dark .caterer-detail-content .card {
+    background: #ffffff;
+    color: #1a1a2e;
+}
+
+body.theme-dark .caterer-detail-content .card h4,
+body.theme-dark .caterer-detail-content .card h5,
+body.theme-dark .caterer-detail-content .card strong,
+body.theme-dark .caterer-detail-content .card-header {
+    color: #1a1a2e;
+}
+
+body.theme-dark .caterer-detail-content .card-header {
+    background: #ffffff !important;
+    border-bottom-color: #eee;
+}
+
+body.theme-dark .caterer-detail-content .text-muted {
+    color: #6c757d !important;
+}
+
+body.theme-dark .caterer-detail-content .menu-item-row {
+    border-bottom-color: #eee;
+}
+
+body.theme-dark .caterer-detail-content .menu-item-thumb {
+    border-color: rgba(0,0,0,0.08);
+}
+
 body.theme-dark .restaurant-list-body h5 { color: #fff; }
 
 body.theme-dark .city-chip {

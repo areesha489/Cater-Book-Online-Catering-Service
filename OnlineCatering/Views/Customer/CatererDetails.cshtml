@@ -2,13 +2,13 @@
 @using OnlineCatering.Services
 @{ ViewData["Title"] = Model.BusinessName; var heroImg = CatererImageHelper.GetImageUrl(Model, Model.CatererId); }
 
-<div class="caterer-detail-hero mb-4">
+<div class="caterer-detail-hero">
     @{ ViewData["CatererImageAlt"] = Model.BusinessName; ViewData["CatererImageClass"] = "caterer-detail-hero-img"; }
     <partial name="_CatererImage" model="@heroImg" />
     <div class="caterer-detail-hero-overlay"></div>
 </div>
 
-<div class="page-header pt-4">
+<div class="page-header caterer-detail-header">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
@@ -24,7 +24,7 @@
                     <span class="badge bg-secondary">@Model.FoodType</span>
                 </p>
             </div>
-            <div>
+            <div class="d-flex flex-wrap gap-2">
                 @if (Context.Session.GetString("UserType") == "Customer")
                 {
                     <form asp-action="ToggleFavorite" method="post" class="d-inline">
@@ -34,7 +34,7 @@
                             @(ViewBag.IsFavorite == true ? "Favorited" : "Add to Favorites")
                         </button>
                     </form>
-                    <a asp-action="Book" asp-route-catererId="@Model.CatererId" class="btn btn-primary-custom ms-2">Book Now</a>
+                    <a asp-action="Book" asp-route-catererId="@Model.CatererId" class="btn btn-primary-custom">Book Now</a>
                 }
                 else
                 {
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div class="container pb-5">
+<div class="container pb-5 caterer-detail-content">
     <div class="row">
         <div class="col-lg-8">
             <div class="card p-4 mb-4">
