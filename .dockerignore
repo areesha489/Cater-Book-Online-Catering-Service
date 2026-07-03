@@ -1,0 +1,17 @@
+.git/
+.vs/
+.idea/
+
+**/bin/
+**/obj/
+
+.env
+.env.*
+*.local
+
+logs/
+*.log
+
+~$*
+Thumbs.db
+.DS_Store

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: cater-book-online-catering-service
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
